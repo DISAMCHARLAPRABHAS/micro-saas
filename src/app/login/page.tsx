@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { login } from './actions';
 import { LoaderCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address.'),
@@ -25,6 +26,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,7 +48,7 @@ export default function LoginPage() {
         title: 'Login Successful',
         description: 'Welcome back!',
       });
-      // Redirect handled by Firebase auth state change
+      router.push('/chat');
     }
   };
 

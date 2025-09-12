@@ -12,7 +12,7 @@ export async function signup(values: z.infer<typeof schema>) {
     try {
         const validatedValues = schema.parse(values);
         await createUserWithEmailAndPassword(auth, validatedValues.email, validatedValues.password);
-        return { success: true };
+        return { success: true, error: null };
     } catch (error: any) {
         let errorMessage = 'An unexpected error occurred. Please try again.';
         if (error instanceof z.ZodError) {
@@ -32,6 +32,6 @@ export async function signup(values: z.infer<typeof schema>) {
                     errorMessage = `An authentication error occurred: ${error.message}`;
             }
         }
-        return { error: errorMessage };
+        return { success: false, error: errorMessage };
     }
 }
