@@ -3,6 +3,7 @@ import { AppLayout } from '@/components/app-layout';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { AuthProvider } from '@/hooks/use-auth';
 
 export const metadata: Metadata = {
   title: 'NexaHome',
@@ -29,12 +30,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-secondary">
-        <SidebarProvider>
-          <div className="min-h-screen flex flex-col">
-            <AppLayout>{children}</AppLayout>
-            <Toaster />
-          </div>
-        </SidebarProvider>
+        <AuthProvider>
+          <SidebarProvider>
+            <div className="min-h-screen flex flex-col">
+              <AppLayout>{children}</AppLayout>
+              <Toaster />
+            </div>
+          </SidebarProvider>
+        </AuthProvider>
       </body>
     </html>
   );
