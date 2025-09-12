@@ -13,7 +13,6 @@ import {
   Wrench,
   Palette,
   LayoutTemplate,
-  History,
 } from 'lucide-react';
 
 const menuItems = [
@@ -41,11 +40,6 @@ const menuItems = [
     path: '/color-palettes',
     label: 'Color Palettes',
     icon: Palette,
-  },
-  {
-    path: '/history',
-    label: 'History',
-    icon: History,
   },
 ];
 
