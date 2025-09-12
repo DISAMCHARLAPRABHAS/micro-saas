@@ -46,27 +46,11 @@ const menuItems = [
 
 type MainNavProps = {
   onLinkClick?: () => void;
-  isBottomNav?: boolean;
 };
 
 
-export function MainNav({ onLinkClick, isBottomNav = false }: MainNavProps) {
+export function MainNav({ onLinkClick }: MainNavProps) {
   const pathname = usePathname();
-
-  if (isBottomNav) {
-     return (
-      <div className="flex justify-around items-center h-full">
-        {menuItems.map((item) => (
-          <Link href={item.path} key={item.path} onClick={onLinkClick} className={cn("flex flex-col items-center justify-center gap-1 w-full h-full", 
-          pathname.startsWith(item.path) ? 'text-primary' : 'text-muted-foreground'
-          )}>
-            <item.icon className="shrink-0 w-5 h-5" />
-            <span className="text-xs">{item.label}</span>
-          </Link>
-        ))}
-      </div>
-    );
-  }
 
   return (
     <SidebarMenu>
