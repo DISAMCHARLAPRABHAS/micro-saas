@@ -42,7 +42,14 @@ export function ImageSuggestionTool() {
   });
 
   async function handleSubmit() {
-    if (!file) return;
+    if (!file) {
+      toast({
+        title: 'Upload an image first',
+        description: 'You need to upload an image to generate ideas.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     setIsLoading(true);
     setResult(null);
@@ -68,18 +75,6 @@ export function ImageSuggestionTool() {
     }
 
     setIsLoading(false);
-  }
-
-  const handleGenerateMore = () => {
-    if(file) {
-      handleSubmit();
-    } else {
-      toast({
-        title: 'Upload an image first',
-        description: 'You need to upload an image to generate ideas.',
-        variant: 'destructive',
-      });
-    }
   }
 
   return (
@@ -158,9 +153,9 @@ export function ImageSuggestionTool() {
               </div>
           </CardContent>
         </Card>
-         <Button onClick={handleGenerateMore} disabled={isLoading} className="w-full">
-          {isLoading ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : '🔄'}
-          {isLoading ? 'Generating...' : 'Generate More Ideas'}
+         <Button onClick={handleSubmit} disabled={isLoading} className="w-full">
+          {isLoading ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Lightbulb className="mr-2"/>}
+          {isLoading ? 'Generating...' : 'Generate Ideas'}
         </Button>
         <Button variant="outline" className="w-full" onClick={() => toast({ title: 'Coming Soon!' })}>
           <Download className="mr-2"/>
