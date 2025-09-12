@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Building, Layers, Droplets, Zap, PaintBrush, Star, ShieldCheck, BadgeIndianRupee, Tag } from 'lucide-react';
+import { Building, Layers, Droplets, Zap, Paintbrush, Star, ShieldCheck, BadgeIndianRupee, Tag } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 const materialData = {
@@ -121,7 +121,7 @@ export function MaterialRecommendationTool() {
           <TabsTrigger value="walls"><Layers className="w-4 h-4 mr-2"/>Walls & Roofing</TabsTrigger>
           <TabsTrigger value="waterproofing"><Droplets className="w-4 h-4 mr-2"/>Waterproofing</TabsTrigger>
           <TabsTrigger value="electrical"><Zap className="w-4 h-4 mr-2"/>Electrical & Plumbing</TabsTrigger>
-          <TabsTrigger value="finishing"><PaintBrush className="w-4 h-4 mr-2"/>Paint & Finishing</TabsTrigger>
+          <TabsTrigger value="finishing"><Paintbrush className="w-4 h-4 mr-2"/>Paint & Finishing</TabsTrigger>
         </TabsList>
         <TabsContent value="foundation">
           {renderContent('foundation')}
