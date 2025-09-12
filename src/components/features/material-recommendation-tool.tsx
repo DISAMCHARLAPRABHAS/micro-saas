@@ -506,6 +506,72 @@ const waterproofingMaterials: MaterialRecommendationOutput['recommendations'] = 
   },
 ];
 
+const electricalMaterials: MaterialRecommendationOutput['recommendations'] = [
+  {
+    name: 'Finolex Wires',
+    rating: 4.8,
+    tags: ['Reliable', 'Fire retardant', 'Residential'],
+    description: 'One of the most trusted brands in India for electrical wires. Known for safety, reliability, and a wide range of products for residential and commercial use.',
+    priceRange: '₹1,200 - ₹3,500 per 90m coil',
+    durability: '40+ years',
+    brands: ['Finolex FR-LSH', 'Finolex FRLS'],
+    budgetFriendly: false,
+    pros: ['High safety standards', 'Fire retardant properties', 'Excellent brand reputation'],
+    cons: ['Premium pricing'],
+    warranty: 'Assured quality and adherence to safety standards.',
+    usageTips: 'Ideal for all internal wiring in residential and commercial buildings. Use appropriate gauge for different load points.',
+    faqs: [{ question: 'What does FR-LSH mean?', answer: 'It stands for Flame Retardant Low Smoke Halogen, which means the wires are safer during a fire, emitting less smoke and toxic fumes.' }],
+  },
+  {
+    name: 'Polycab Wires',
+    rating: 4.7,
+    tags: ['Wide range', 'Industrial', 'Flexible'],
+    description: 'A leading manufacturer of wires and cables in India with a very wide product portfolio for various applications, from residential to heavy industrial.',
+    priceRange: '₹1,100 - ₹3,200 per 90m coil',
+    durability: '40+ years',
+    brands: ['Polycab FRLS-ZH', 'Polycab Green Wire'],
+    budgetFriendly: false,
+    pros: ['Extensive product range', 'High conductivity copper', 'Good for industrial use'],
+    cons: ['Can be slightly stiff to work with'],
+    warranty: 'Comes with a quality guarantee for performance and safety.',
+    usageTips: 'Suitable for a wide range of applications. Their "Green Wire" is an eco-friendly option with low environmental impact.',
+    faqs: [],
+  },
+];
+
+const plumbingMaterials: MaterialRecommendationOutput['recommendations'] = [
+  {
+    name: 'Supreme Industries Ltd.',
+    rating: 4.7,
+    tags: ['CPVC pipes', 'Trusted brand', 'Wide network'],
+    description: 'An old and trusted brand in the Indian market, known for good quality CPVC pipes, fittings, and a wide network of distributors.',
+    priceRange: 'Mid to Premium',
+    durability: '50+ years',
+    brands: ['Supreme CPVC'],
+    budgetFriendly: false,
+    pros: ['Strong brand reputation', 'Consistent quality', 'Widely available'],
+    cons: ['Can be on the pricier side'],
+    warranty: 'Standard manufacturer warranty on products.',
+    usageTips: 'A reliable choice for both hot and cold water plumbing systems in residential and commercial projects.',
+    faqs: [],
+  },
+  {
+    name: 'Astral Pipes',
+    rating: 4.8,
+    tags: ['Innovative', 'Certified', 'CPVC/PVC'],
+    description: 'Known for innovation and high-quality certifications, Astral offers a wide variety of CPVC, PVC, and HDPE plumbing and drainage systems.',
+    priceRange: 'Premium',
+    durability: '50+ years',
+    brands: ['Astral CPVC Pro', 'Astral P-trap'],
+    budgetFriendly: false,
+    pros: ['Leader in innovation', 'High-quality standards', 'Excellent for hot water applications'],
+    cons: ['Premium pricing'],
+    warranty: 'Often comes with a long-term performance warranty.',
+    usageTips: 'Highly recommended for projects where quality and long-term reliability are paramount. Their products often exceed standard quality requirements.',
+    faqs: [{ question: 'Is Astral better than other brands?', answer: 'Astral is widely regarded as a top-tier brand due to its focus on quality, innovation, and certifications, making it a preferred choice for many professionals.' }],
+  },
+];
+
 
 const MaterialCard = ({
   material,
@@ -605,7 +671,7 @@ export function MaterialRecommendationTool() {
   const renderContent = (
     categoryMaterials: MaterialRecommendationOutput['recommendations']
   ) => {
-    if (categoryMaterials.length === 0) {
+    if (!categoryMaterials || categoryMaterials.length === 0) {
       return (
         <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">
           AI recommendations for this category will appear here soon.
@@ -670,7 +736,18 @@ export function MaterialRecommendationTool() {
           {renderContent(waterproofingMaterials)}
         </TabsContent>
         <TabsContent value="electrical">
-          {renderContent([])}
+           <Tabs defaultValue="electrical-wiring" className="w-full">
+            <TabsList>
+              <TabsTrigger value="electrical-wiring">Electrical (Wires)</TabsTrigger>
+              <TabsTrigger value="plumbing-pipes">Plumbing (Pipes)</TabsTrigger>
+            </TabsList>
+            <TabsContent value="electrical-wiring" className="mt-6">
+              {renderContent(electricalMaterials)}
+            </TabsContent>
+            <TabsContent value="plumbing-pipes" className="mt-6">
+              {renderContent(plumbingMaterials)}
+            </TabsContent>
+          </Tabs>
         </TabsContent>
         <TabsContent value="finishing">
           {renderContent([])}
