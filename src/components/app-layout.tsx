@@ -4,13 +4,11 @@ import {
   SidebarContent,
   SidebarHeader,
 } from '@/components/ui/sidebar';
-import { AppLogo } from '@/components/app-logo';
 import { MainNav } from '@/components/main-nav';
 import { BottomNav } from '@/components/bottom-nav';
 import { UserNav } from '@/components/user-nav';
 import { useAuth } from '@/hooks/use-auth';
-import { Button } from './ui/button';
-import Link from 'next/link';
+import { AppFooter } from './app-footer';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -35,6 +33,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <UserNav />
             </header>
           <main className="flex-1 overflow-auto">{children}</main>
+          <AppFooter />
         </div>
       </div>
 
@@ -50,6 +49,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
            <UserNav />
         </header>
         <main className="flex-1 overflow-auto pb-20">{children}</main>
+        <AppFooter />
         <BottomNav />
       </div>
     </>
