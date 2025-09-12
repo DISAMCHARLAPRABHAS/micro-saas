@@ -21,7 +21,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="hidden md:flex flex-1 min-h-0">
         <Sidebar className="bg-card border-r flex">
           <SidebarHeader className="border-b group transition-transform duration-300 hover:scale-105">
-            <AppLogo className="transition-transform duration-300 group-hover:animate-pulse" />
+            
             <h1 className="text-lg font-headline font-semibold text-primary transition-colors duration-300 group-hover:text-primary/80">
               NexaHome
             </h1>
@@ -42,7 +42,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="flex md:hidden flex-col flex-1 min-h-0">
         <header className="flex items-center justify-between p-4 border-b bg-card">
           <div className="group flex items-center gap-2 transition-transform duration-300 hover:scale-105">
-            <AppLogo className="transition-transform duration-300 group-hover:animate-pulse" />
+            
             <h1 className="text-lg font-headline font-semibold text-primary transition-colors duration-300 group-hover:text-primary/80">
               NexaHome
             </h1>

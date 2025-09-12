@@ -108,7 +108,7 @@ export function ChatInterface() {
             >
               {message.role === 'assistant' && (
                 <Avatar className="w-8 h-8 border">
-                  <AvatarFallback><AppLogo /></AvatarFallback>
+                  <AvatarFallback>N</AvatarFallback>
                 </Avatar>
               )}
               <div
@@ -144,7 +144,7 @@ export function ChatInterface() {
           {isLoading && (
              <div className="flex items-start gap-3 justify-start">
               <Avatar className="w-8 h-8 border">
-                <AvatarFallback><AppLogo /></AvatarFallback>
+                <AvatarFallback>N</AvatarFallback>
               </Avatar>
               <div className="rounded-lg p-3 bg-card border">
                 <LoaderCircle className="animate-spin w-5 h-5 text-primary" />
