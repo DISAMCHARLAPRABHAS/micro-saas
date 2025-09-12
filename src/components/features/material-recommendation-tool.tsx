@@ -495,16 +495,18 @@ export function MaterialRecommendationTool() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="foundation">
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-xl font-bold font-headline mb-4">M25 Concrete</h3>
-                {renderContent(concreteMaterials)}
-              </div>
-              <div>
-                <h3 className="text-xl font-bold font-headline mb-4">Steel (TMT Bars)</h3>
-                {renderContent(steelMaterials)}
-              </div>
-            </div>
+          <Tabs defaultValue="concrete" className="w-full">
+            <TabsList>
+              <TabsTrigger value="concrete">M25 Concrete</TabsTrigger>
+              <TabsTrigger value="steel">Steel (TMT Bars)</TabsTrigger>
+            </TabsList>
+            <TabsContent value="concrete" className="mt-6">
+              {renderContent(concreteMaterials)}
+            </TabsContent>
+            <TabsContent value="steel" className="mt-6">
+              {renderContent(steelMaterials)}
+            </TabsContent>
+          </Tabs>
         </TabsContent>
         <TabsContent value="walls">
           {renderContent([])}
