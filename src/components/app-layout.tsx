@@ -13,6 +13,7 @@ import { AppLogo } from '@/components/app-logo';
 import { MainNav } from '@/components/main-nav';
 import { Button } from './ui/button';
 import { PanelLeft } from 'lucide-react';
+import { SheetTitle } from './ui/sheet';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -46,9 +47,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <SidebarSheetContent>
                 <SidebarSheetHeader>
                   <AppLogo className="w-8 h-8" />
-                  <h1 className="text-xl font-headline font-semibold tracking-tight text-primary">
+                  <SheetTitle className="text-xl font-headline font-semibold tracking-tight text-primary">
                     HomeAI
-                  </h1>
+                  </SheetTitle>
                 </SidebarSheetHeader>
                 <MainNav />
               </SidebarSheetContent>
