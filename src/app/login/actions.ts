@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 const schema = z.object({
     email: z.string().email(),
-    password: z.string().min(6),
+    password: z.string().min(1),
 });
 
 export async function login(values: z.infer<typeof schema>) {
@@ -14,7 +14,7 @@ export async function login(values: z.infer<typeof schema>) {
         await signInWithEmailAndPassword(auth, validatedValues.email, validatedValues.password);
         return { success: true };
     } catch (error: any) {
-        let errorMessage = 'An unexpected error occurred.';
+        let errorMessage = 'An unexpected error occurred. Please try again.';
         if (error instanceof z.ZodError) {
             errorMessage = error.errors.map((e) => e.message).join(' ');
         } else if (error.code) {
@@ -28,7 +28,7 @@ export async function login(values: z.infer<typeof schema>) {
                     errorMessage = 'The email address is not valid.';
                     break;
                 default:
-                    errorMessage = `An error occurred: ${error.message}`;
+                    errorMessage = `An authentication error occurred: ${error.message}`;
             }
         }
         return { error: errorMessage };
