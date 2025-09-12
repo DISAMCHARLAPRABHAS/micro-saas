@@ -12,11 +12,14 @@ import type { MaterialRecommendationOutput } from '@/ai/flows/material-recommend
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle, XCircle, HelpCircle, Star, MessageSquare } from 'lucide-react';
+import { CheckCircle, XCircle, HelpCircle, Star, MessageSquare, LoaderCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { StarRating } from '../ui/star-rating';
 import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
 
 
 type Review = {
@@ -44,7 +47,41 @@ export function LearnMoreSheet({
   material,
 }: LearnMoreSheetProps) {
   const { toast } = useToast();
-  const [reviews] = useState<Review[]>(initialReviews);
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [newReviewRating, setNewReviewRating] = useState(0);
+  const [newReviewComment, setNewReviewComment] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newReviewRating === 0 || !newReviewComment.trim()) {
+      toast({
+        title: 'Incomplete Review',
+        description: 'Please provide a rating and a comment.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    // Simulate network delay
+    setTimeout(() => {
+      const newReview: Review = {
+        name: 'You',
+        rating: newReviewRating,
+        comment: newReviewComment,
+        date: 'Just now',
+      };
+      setReviews([newReview, ...reviews]);
+      setNewReviewRating(0);
+      setNewReviewComment('');
+      setIsSubmitting(false);
+      toast({
+        title: 'Review Submitted!',
+        description: 'Thank you for your feedback.',
+      });
+    }, 1000);
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -136,6 +173,33 @@ export function LearnMoreSheet({
                     ))}
                 </div>
             </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Write a Review</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleReviewSubmit} className="space-y-4">
+                  <div>
+                    <Label htmlFor="review-rating" className="mb-2 block">Your Rating</Label>
+                    <StarRating rating={newReviewRating} onRatingChange={setNewReviewRating} />
+                  </div>
+                  <div>
+                    <Label htmlFor="review-comment">Your Review</Label>
+                    <Textarea
+                      id="review-comment"
+                      value={newReviewComment}
+                      onChange={(e) => setNewReviewComment(e.target.value)}
+                      placeholder="Share your experience with this material..."
+                      rows={4}
+                    />
+                  </div>
+                  <Button type="submit" disabled={isSubmitting} className="w-full">
+                    {isSubmitting ? <LoaderCircle className="animate-spin" /> : 'Submit Review'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
         </div>
 
         <SheetFooter className="mt-8 gap-2 sm:flex-col">
