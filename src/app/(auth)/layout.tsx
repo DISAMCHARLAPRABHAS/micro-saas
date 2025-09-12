@@ -9,9 +9,9 @@ export default function AuthLayout({
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
             <div className="w-full max-w-sm">
                 <div className="mb-6 flex justify-center">
-                    <div className="flex items-center gap-2">
-                        <AppLogo />
-                        <h1 className="text-2xl font-headline font-semibold text-primary">
+                    <div className="group flex items-center gap-2 transition-transform duration-300 hover:scale-105">
+                        <AppLogo className="transition-transform duration-300 group-hover:animate-pulse" />
+                        <h1 className="text-2xl font-headline font-semibold text-primary transition-colors duration-300 group-hover:text-primary/80">
                             NexaHome
                         </h1>
                     </div>
