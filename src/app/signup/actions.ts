@@ -15,19 +15,22 @@ export async function signup(values: z.infer<typeof schema>) {
         return { success: true };
     } catch (error: any) {
         let errorMessage = 'An unexpected error occurred.';
-        if (error.code) {
+        if (error instanceof z.ZodError) {
+            errorMessage = error.errors.map((e) => e.message).join(' ');
+        } else if (error.code) {
              switch (error.code) {
                 case 'auth/email-already-in-use':
                     errorMessage = 'This email is already in use.';
                     break;
                 case 'auth/weak-password':
-                    errorMessage = 'The password is too weak.';
+                    errorMessage = 'The password is too weak. It must be at least 6 characters long.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'The email address is not valid.';
                     break;
                 default:
                     errorMessage = `An error occurred: ${error.message}`;
             }
-        } else if (error instanceof z.ZodError) {
-            errorMessage = error.errors.map((e) => e.message).join(' ');
         }
         return { error: errorMessage };
     }

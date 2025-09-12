@@ -15,18 +15,21 @@ export async function login(values: z.infer<typeof schema>) {
         return { success: true };
     } catch (error: any) {
         let errorMessage = 'An unexpected error occurred.';
-        if (error.code) {
+        if (error instanceof z.ZodError) {
+            errorMessage = error.errors.map((e) => e.message).join(' ');
+        } else if (error.code) {
             switch (error.code) {
                 case 'auth/user-not-found':
                 case 'auth/wrong-password':
                 case 'auth/invalid-credential':
-                    errorMessage = 'Invalid email or password.';
+                     errorMessage = 'Invalid email or password.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'The email address is not valid.';
                     break;
                 default:
                     errorMessage = `An error occurred: ${error.message}`;
             }
-        } else if (error instanceof z.ZodError) {
-            errorMessage = error.errors.map((e) => e.message).join(' ');
         }
         return { error: errorMessage };
     }
