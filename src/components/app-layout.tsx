@@ -13,12 +13,31 @@ import {
 import { AppLogo } from '@/components/app-logo';
 import { MainNav } from '@/components/main-nav';
 import { Button } from './ui/button';
-import { PanelLeft } from 'lucide-react';
+import { LogOut, PanelLeft, User } from 'lucide-react';
 import { SheetTitle } from './ui/sheet';
-import { UserButton, useUser } from '@clerk/nextjs';
+import { useAuth } from '@/hooks/use-auth';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
+import { Avatar, AvatarFallback } from './ui/avatar';
+import { usePathname } from 'next/navigation';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
-  const { isSignedIn } = useUser();
+  const { user, loading, logout } = useAuth();
+  const pathname = usePathname();
+  const isSignedIn = !!user;
+
+  const showLayout = !['/sign-in', '/register'].includes(pathname) && !loading;
+
+  if (!showLayout) {
+    return <>{children}</>;
+  }
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen flex-col md:flex-row">
@@ -34,7 +53,24 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <MainNav />
             </SidebarContent>
             <SidebarFooter>
-              <UserButton />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Avatar className="w-8 h-8">
+                      <AvatarFallback>
+                        <User />
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout}>
+                    <LogOut className="mr-2" /> Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </SidebarFooter>
           </Sidebar>
         )}
@@ -48,7 +84,24 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 </h1>
               </div>
               <div className="flex items-center gap-2">
-                <UserButton />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <Avatar className="w-8 h-8">
+                        <AvatarFallback>
+                          <User />
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout}>
+                      <LogOut className="mr-2" /> Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <SidebarSheet>
                   <SidebarTrigger asChild>
                     <Button variant="ghost" size="icon">
