@@ -43,7 +43,12 @@ const menuItems = [
   },
 ];
 
-export function MainNav() {
+type MainNavProps = {
+  onLinkClick?: () => void;
+};
+
+
+export function MainNav({ onLinkClick }: MainNavProps) {
   const pathname = usePathname();
 
   return (
@@ -56,6 +61,7 @@ export function MainNav() {
             variant="ghost"
             className="justify-start"
             tooltip={item.label}
+            onClick={onLinkClick}
           >
             <Link href={item.path}>
               <item.icon className="shrink-0" />

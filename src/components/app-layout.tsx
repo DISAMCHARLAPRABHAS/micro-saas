@@ -14,8 +14,10 @@ import { MainNav } from '@/components/main-nav';
 import { Button } from './ui/button';
 import { PanelLeft } from 'lucide-react';
 import { SheetTitle } from './ui/sheet';
+import { useState } from 'react';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   return (
     <SidebarProvider>
       <div className="flex min-h-screen flex-col md:flex-row">
@@ -36,7 +38,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               </h1>
             </div>
             <div className="flex items-center gap-2">
-              <SidebarSheet>
+              <SidebarSheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SidebarTrigger asChild>
                   <Button variant="ghost" size="icon">
                     <PanelLeft />
@@ -49,7 +51,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                       HomeAI
                     </SheetTitle>
                   </SidebarSheetHeader>
-                  <MainNav />
+                  <MainNav onLinkClick={() => setIsSheetOpen(false)} />
                 </SidebarSheetContent>
               </SidebarSheet>
             </div>
