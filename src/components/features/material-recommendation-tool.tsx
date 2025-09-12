@@ -351,7 +351,7 @@ export function MaterialRecommendationTool() {
         </TabsContent>
         <TabsContent value="electrical">
           {renderContent([])}
-        </Tabs.Content>
+        </TabsContent>
         <TabsContent value="finishing">
           {renderContent([])}
         </TabsContent>
