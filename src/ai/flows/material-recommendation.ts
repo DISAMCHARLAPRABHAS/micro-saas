@@ -31,7 +31,7 @@ const MaterialSchema = z.object({
   rating: z.number().describe('A rating from 1 to 5, can be a float.'),
   tags: z.array(z.string()).describe('Keywords associated with the material (e.g., ["Foundation", "Columns"]).'),
   description: z.string().describe('A short description of the material.'),
-  priceRange: z.string().describe('The estimated price range (e.g., "₹4,500-5,200/cubic meter").'),
+  priceRange: z.string().describe('The estimated price range in INR (e.g., "₹4,500-5,200/cubic meter").'),
   durability: z.string().describe('The expected durability (e.g., "25+ years").'),
   brands: z.array(z.string()).describe('A list of recommended brands (e.g., ["UltraTech", "ACC", "Ambuja"]).'),
   budgetFriendly: z.boolean().describe('Whether the material is considered budget-friendly.'),
@@ -65,7 +65,7 @@ const materialRecommendationPrompt = ai.definePrompt({
 
 Category: {{{category}}}
 
-Generate detailed recommendations including name, rating, tags, description, price range in INR, durability, a list of 2-3 popular brands, and whether it's budget-friendly.
+Generate detailed recommendations including name, rating, tags, description, price range in INR (Indian Rupees), durability, a list of 2-3 popular brands, and whether it's budget-friendly.
 `,
 });
 
