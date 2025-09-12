@@ -1,25 +1,12 @@
-// Material Recommendation Flow
 'use server';
 
 /**
  * @fileOverview This file defines a Genkit flow for recommending construction materials based on user specifications.
  *
- * The flow takes room type, wall specifications, or slab requirements as input and returns
- * recommendations for appropriate construction materials.
+ * The flow takes a material category as input and returns a structured list of material recommendations.
  *
- * @param {MaterialRecommendationInput} input - The input data containing room type, wall specifications, and/or slab requirements.
+ * @param {MaterialRecommendationInput} input - The input data containing the material category.
  * @returns {Promise<MaterialRecommendationOutput>} - A promise that resolves with the material recommendations.
- *
- * @example
- * // Example usage:
- * const input = {
- *   roomType: "Bathroom",
- *   wallSpecs: "Moisture resistant",
- *   slabRequirements: "None"
- * };
- *
- * const recommendations = await recommendMaterials(input);
- * console.log(recommendations);
  */
 
 import {ai} from '@/ai/genkit';
@@ -27,22 +14,45 @@ import {z} from 'genkit';
 
 // Define the input schema
 const MaterialRecommendationInputSchema = z.object({
-  roomType: z.string().describe("The type of room (e.g., bedroom, bathroom, kitchen).").optional(),
-  wallSpecs: z.string().describe("Specifications for the walls (e.g., moisture resistant, soundproof).").optional(),
-  slabRequirements: z.string().describe("Requirements for the slab (e.g., load-bearing, insulated).").optional(),
+  category: z
+    .string()
+    .describe(
+      'The category of materials to recommend (e.g., "Foundation & Structure", "Walls & Roofing").'
+    ),
 });
 
-export type MaterialRecommendationInput = z.infer<typeof MaterialRecommendationInputSchema>;
+export type MaterialRecommendationInput = z.infer<
+  typeof MaterialRecommendationInputSchema
+>;
 
-// Define the output schema
+// Define the output schema for a single material
+const MaterialSchema = z.object({
+  name: z.string().describe('The name of the material (e.g., "M25 Grade Concrete").'),
+  rating: z.number().describe('A rating from 1 to 5, can be a float.'),
+  tags: z.array(z.string()).describe('Keywords associated with the material (e.g., ["Foundation", "Columns"]).'),
+  description: z.string().describe('A short description of the material.'),
+  priceRange: z.string().describe('The estimated price range (e.g., "₹4,500-5,200/cubic meter").'),
+  durability: z.string().describe('The expected durability (e.g., "25+ years").'),
+  brands: z.array(z.string()).describe('A list of recommended brands (e.g., ["UltraTech", "ACC", "Ambuja"]).'),
+  budgetFriendly: z.boolean().describe('Whether the material is considered budget-friendly.'),
+});
+
 const MaterialRecommendationOutputSchema = z.object({
-  recommendations: z.string().describe("Recommended construction materials based on the input specifications."),
+  recommendations: z
+    .array(MaterialSchema)
+    .describe(
+      'A list of recommended construction materials for the given category.'
+    ),
 });
 
-export type MaterialRecommendationOutput = z.infer<typeof MaterialRecommendationOutputSchema>;
+export type MaterialRecommendationOutput = z.infer<
+  typeof MaterialRecommendationOutputSchema
+>;
 
 // Exported function to call the flow
-export async function recommendMaterials(input: MaterialRecommendationInput): Promise<MaterialRecommendationOutput> {
+export async function recommendMaterials(
+  input: MaterialRecommendationInput
+): Promise<MaterialRecommendationOutput> {
   return materialRecommendationFlow(input);
 }
 
@@ -51,13 +61,12 @@ const materialRecommendationPrompt = ai.definePrompt({
   name: 'materialRecommendationPrompt',
   input: {schema: MaterialRecommendationInputSchema},
   output: {schema: MaterialRecommendationOutputSchema},
-  prompt: `Based on the following specifications, recommend appropriate construction materials:
+  prompt: `You are an expert in construction materials. Based on the category provided, recommend 2-3 relevant construction materials. For each material, provide all the details as specified in the output schema.
 
-  {% if roomType %}Room Type: {{{roomType}}}{% endif %}
-  {% if wallSpecs %}Wall Specifications: {{{wallSpecs}}}{% endif %}
-  {% if slabRequirements %}Slab Requirements: {{{slabRequirements}}}{% endif %}
+Category: {{{category}}}
 
-  Recommendations:`, // Use Handlebars syntax to conditionally include the specifications
+Generate detailed recommendations including name, rating, tags, description, price range in INR, durability, a list of 2-3 popular brands, and whether it's budget-friendly.
+`,
 });
 
 // Define the flow

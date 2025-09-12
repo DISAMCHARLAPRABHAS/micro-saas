@@ -1,217 +1,144 @@
 'use client';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { getMaterialRecommendationAction } from '@/app/materials/actions';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useState } from 'react';
-import type { MaterialRecommendationOutput } from '@/ai/flows/material-recommendation';
-import { LoaderCircle, Wrench, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Building, Layers, Droplets, Zap, PaintBrush, Star, ShieldCheck, BadgeIndianRupee, Tag } from 'lucide-react';
+import { Badge } from '../ui/badge';
 
-const formSchema = z.object({
-  roomType: z.string().optional(),
-  wallSpecs: z.string().optional(),
-  slabRequirements: z.string().optional(),
-}).refine(data => data.roomType || data.wallSpecs || data.slabRequirements, {
-    message: "Please fill out at least one field.",
-    path: ["roomType"],
-});
+const materialData = {
+  foundation: [
+    {
+      name: 'M25 Grade Concrete',
+      rating: 4.8,
+      tags: ['Foundation', 'Columns', 'Beams'],
+      description: 'High-strength concrete ideal for foundation and load-bearing structures.',
+      priceRange: '₹4,500-5,200/cubic meter',
+      durability: '25+ years',
+      brands: ['UltraTech', 'ACC', 'Ambuja'],
+      budgetFriendly: true,
+    },
+    {
+      name: 'TMT Steel Bars',
+      rating: 4.9,
+      tags: ['Reinforcement'],
+      description: 'Corrosion-resistant steel reinforcement with superior strength.',
+      priceRange: '₹65-75/kg',
+      durability: '50+ years',
+      brands: ['Tata Steel', 'SAIL', 'JSW'],
+      budgetFriendly: true,
+    },
+  ],
+  walls: [
+    {
+      name: 'AAC Blocks',
+      rating: 4.7,
+      tags: ['Lightweight', 'Internal & External Walls'],
+      description: 'Lightweight, pre-cast, foam concrete building material.',
+      priceRange: '₹3,000-4,000/cubic meter',
+      durability: '50+ years',
+      brands: ['Magicrete', 'Ultratech', 'Birla Aerocon'],
+      budgetFriendly: false,
+    },
+  ],
+  waterproofing: [],
+  electrical: [],
+  finishing: [],
+};
+
+
+const MaterialCard = ({ material }: { material: any }) => {
+  const { toast } = useToast();
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex justify-between items-start">
+          <CardTitle className="text-xl font-bold font-headline">{material.name}</CardTitle>
+          {material.budgetFriendly && <Badge variant="secondary" className="bg-orange-100 text-orange-600 border-orange-200">Budget Friendly</Badge>}
+        </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+          <span>{material.rating}</span>
+          <span>&middot;</span>
+          <span>{material.tags.join(', ')}</span>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground mb-4">{material.description}</p>
+        <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+            <div className="flex items-start gap-2">
+                <BadgeIndianRupee className="w-5 h-5 text-muted-foreground mt-1"/>
+                <div>
+                    <p className="font-semibold">Price Range</p>
+                    <p className="text-muted-foreground">{material.priceRange}</p>
+                </div>
+            </div>
+            <div className="flex items-start gap-2">
+                <ShieldCheck className="w-5 h-5 text-muted-foreground mt-1"/>
+                <div>
+                    <p className="font-semibold">Durability</p>
+                    <p className="text-muted-foreground">{material.durability}</p>
+                </div>
+            </div>
+        </div>
+        <div className="mb-6">
+            <p className="font-semibold text-sm flex items-center gap-2 mb-2"><Tag className="w-4 h-4 text-muted-foreground"/> Recommended Brands:</p>
+            <div className="flex flex-wrap gap-2">
+                {material.brands.map((brand: string) => (
+                    <Badge key={brand} variant="outline" className="font-normal">{brand}</Badge>
+                ))}
+            </div>
+        </div>
+        <div className="flex gap-2">
+          <Button className="w-full" onClick={() => toast({ title: 'Get Quote: Coming Soon!' })}>Get Quote</Button>
+          <Button variant="outline" className="w-full" onClick={() => toast({ title: 'Learn More: Coming Soon!' })}>Learn More</Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+};
+
 
 export function MaterialRecommendationTool() {
-  const [result, setResult] = useState<MaterialRecommendationOutput | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      roomType: '',
-      wallSpecs: '',
-      slabRequirements: '',
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    setResult(null);
-    const { data, error } = await getMaterialRecommendationAction(values);
-    if (error) {
-      toast({
-        title: 'Error',
-        description: error,
-        variant: 'destructive',
-      });
-    } else {
-      setResult(data);
+  const renderContent = (category: keyof typeof materialData) => {
+    const materials = materialData[category];
+    if (materials.length === 0) {
+      return <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">AI recommendations for this category will appear here soon.</p>;
     }
-    setIsLoading(false);
+    return (
+      <div className="grid md:grid-cols-2 gap-6">
+        {materials.map(material => <MaterialCard key={material.name} material={material} />)}
+      </div>
+    )
   }
 
   return (
     <div>
-      <Tabs defaultValue="walls" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 mb-4">
-          <TabsTrigger value="walls">Walls</TabsTrigger>
-          <TabsTrigger value="roofing">Roofing</TabsTrigger>
-          <TabsTrigger value="flooring">Flooring</TabsTrigger>
-          <TabsTrigger value="plumbing">Plumbing</TabsTrigger>
-          <TabsTrigger value="electrical">Electrical</TabsTrigger>
-          <TabsTrigger value="finishes">Finishes</TabsTrigger>
+      <p className="text-muted-foreground mb-4">Choose the right materials for every part of your construction project</p>
+      <Tabs defaultValue="foundation" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 mb-6 h-auto flex-wrap md:h-10">
+          <TabsTrigger value="foundation"><Building className="w-4 h-4 mr-2"/>Foundation & Structure</TabsTrigger>
+          <TabsTrigger value="walls"><Layers className="w-4 h-4 mr-2"/>Walls & Roofing</TabsTrigger>
+          <TabsTrigger value="waterproofing"><Droplets className="w-4 h-4 mr-2"/>Waterproofing</TabsTrigger>
+          <TabsTrigger value="electrical"><Zap className="w-4 h-4 mr-2"/>Electrical & Plumbing</TabsTrigger>
+          <TabsTrigger value="finishing"><PaintBrush className="w-4 h-4 mr-2"/>Paint & Finishing</TabsTrigger>
         </TabsList>
+        <TabsContent value="foundation">
+          {renderContent('foundation')}
+        </TabsContent>
         <TabsContent value="walls">
-          <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">AI recommendations for bricks, cement, plaster, and paint bases will appear here based on your project needs.</p>
+          {renderContent('walls')}
         </TabsContent>
-        <TabsContent value="roofing">
-          <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">AI recommendations for tiles, concrete slabs, and waterproofing will appear here.</p>
+        <TabsContent value="waterproofing">
+          {renderContent('waterproofing')}
         </TabsContent>
-        <TabsContent value="flooring">
-           <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">AI recommendations for tiles, marble, wood, and vinyl flooring will appear here.</p>
+        <TabsContent value="electrical">
+          {renderContent('electrical')}
         </TabsContent>
-        <TabsContent value="plumbing">
-           <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">AI recommendations for pipes, fittings, and waterproofing will appear here.</p>
-        </TabsContent>
-         <TabsContent value="electrical">
-           <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">AI recommendations for wiring, panels, and switches will appear here.</p>
-        </TabsContent>
-        <TabsContent value="finishes">
-           <p className="text-sm text-muted-foreground p-4 bg-card rounded-lg">AI recommendations for paints, polish, and textures will appear here.</p>
+        <TabsContent value="finishing">
+          {renderContent('finishing')}
         </TabsContent>
       </Tabs>
-      
-      <div className="grid md:grid-cols-2 gap-8 mt-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Get Specific Recommendations</CardTitle>
-            <CardDescription>Specify your requirements to get detailed material recommendations.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="roomType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Room Type</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 'Bathroom' or 'Kitchen'" {...field} />
-                      </FormControl>
-                      <FormDescription>What kind of room is this for?</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="wallSpecs"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Wall Specifications</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 'Moisture resistant'" {...field} />
-                      </FormControl>
-                      <FormDescription>Any special requirements for the walls?</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="slabRequirements"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Slab Requirements</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 'Load-bearing'" {...field} />
-                      </FormControl>
-                      <FormDescription>Any special requirements for the slab/floor?</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" disabled={isLoading} className="w-full">
-                  {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                  Get Recommendations
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-4">
-          {isLoading && (
-            <Card className="flex items-center justify-center min-h-[300px]">
-              <div className="text-center text-muted-foreground space-y-2">
-                  <LoaderCircle className="mx-auto h-8 w-8 animate-spin" />
-                  <p>Finding the best materials...</p>
-              </div>
-            </Card>
-          )}
-          {!isLoading && !result && (
-              <Card className="flex items-center justify-center min-h-[300px] border-dashed">
-                  <div className="text-center text-muted-foreground space-y-2">
-                      <Wrench className="mx-auto h-8 w-8" />
-                      <p>Material recommendations will appear here.</p>
-                  </div>
-              </Card>
-          )}
-          {result && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Recommended Materials</CardTitle>
-                <CardDescription>Includes brand, cost range, durability, and more.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="whitespace-pre-line">{result.recommendations}</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Card>
-                        <CardHeader><CardTitle>ACC Gold Cement</CardTitle></CardHeader>
-                        <CardContent>
-                            <p><strong>Cost:</strong> ₹400-₹450 / bag</p>
-                            <p><strong>Durability:</strong> 9/10</p>
-                            <p><strong>Pros:</strong> Waterproof</p>
-                            <p><strong>Cons:</strong> Higher cost</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader><CardTitle>Anti-Skid Kitchen Tiles</CardTitle></CardHeader>
-                        <CardContent>
-                            <p><strong>Cost:</strong> ₹80-₹120 / sqft</p>
-                            <p><strong>Durability:</strong> 8/10</p>
-                            <p><strong>Pros:</strong> Safe for wet areas</p>
-                            <p><strong>Cons:</strong> Limited designs</p>
-                        </CardContent>
-                    </Card>
-                </div>
-                <Button variant="outline" className="w-full" onClick={() => toast({ title: 'Coming Soon!' })}>
-                  <Download className="mr-2"/>
-                  Export as PDF/CSV
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-           <Card>
-              <CardHeader><CardTitle>Smart Tips</CardTitle></CardHeader>
-              <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <p>💡 "Use waterproof cement for bathrooms and kitchens."</p>
-                  <p>💡 "Go with anti-skid tiles for kitchen and wet areas."</p>
-              </CardContent>
-           </Card>
-        </div>
-      </div>
     </div>
   );
 }
