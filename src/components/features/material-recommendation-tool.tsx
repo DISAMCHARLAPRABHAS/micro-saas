@@ -27,54 +27,174 @@ import { LearnMoreSheet } from './learn-more-sheet';
 
 const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
   {
-    name: 'M25 Grade Concrete',
+    name: 'UltraTech Cement',
     rating: 4.8,
-    tags: ['Foundation', 'Columns', 'Beams'],
-    description:
-      'High-strength concrete ideal for foundation and load-bearing structures.',
-    priceRange: '₹4,500 - ₹5,200 per cubic meter',
-    durability: '25+ years',
-    brands: ['UltraTech', 'ACC', 'Ambuja'],
-    budgetFriendly: true,
-    pros: [
-      'High compressive strength',
-      'Excellent durability',
-      'Versatile for various structural elements',
-    ],
-    cons: ['Requires precise mix ratio', 'Higher cost than lower grades'],
-    warranty: 'Not typically applicable; depends on Ready Mix Concrete (RMC) supplier.',
-    usageTips: 'Ensure proper curing for at least 7-14 days to achieve desired strength. Best for high-rise buildings and heavy-duty structures.',
+    tags: ['All structural work', 'Foundation', 'Ready Mix'],
+    description: "India's largest cement producer (part of Aditya Birla Group). Known for consistent quality, wide availability, and innovative products (Ready Mix, waterproof, eco-friendly blends). USP: Widely available, reliable, strong customer trust.",
+    priceRange: '₹380 - ₹420 per bag (50kg)',
+    durability: '25-50 years',
+    brands: ['UltraTech OPC 43/53', 'PPC', 'UltraTech Ready Mix Concrete'],
+    budgetFriendly: false,
+    pros: ['High compressive strength', 'Excellent durability', 'Widely available'],
+    cons: ['Slightly premium pricing'],
+    warranty: 'Varies by supplier and product; typically assured quality.',
+    usageTips: 'Ideal for all types of foundation and structural work (M20, M25, M30 concrete). Ensure proper curing for best results.',
     faqs: [
-      {
-        question: 'Is M25 grade sufficient for a 3-story house?',
-        answer: 'Yes, M25 is more than sufficient and recommended for residential buildings up to 3-4 stories for ensuring long-term structural integrity.'
-      }
-    ]
+      { question: 'Is UltraTech good for high-rise buildings?', answer: 'Yes, its high compressive strength makes it ideal for high-rise residential and commercial buildings.' },
+    ],
   },
   {
-    name: 'TMT Steel Bars (Fe 500)',
-    rating: 4.9,
-    tags: ['Reinforcement', 'Slab', 'Columns'],
-    description:
-      'Thermo-Mechanically Treated bars provide superior strength, ductility, and corrosion resistance, essential for earthquake-prone areas.',
-    priceRange: '₹65 - ₹75 per kg',
-    durability: '50+ years',
-    brands: ['Tata Tiscon', 'SAIL', 'JSW NeoSteel'],
+    name: 'ACC Cement',
+    rating: 4.7,
+    tags: ['Foundation', 'Load-bearing walls', 'Eco-friendly'],
+    description: "One of India’s oldest cement companies (since 1936), now part of Holcim Group. Known for quality control & innovative sustainable practices. USP: Strong R&D focus, eco-friendly cement.",
+    priceRange: '₹370 - ₹410 per bag',
+    durability: '25-40 years',
+    brands: ['ACC Gold Water Shield', 'ACC Ready Mix'],
     budgetFriendly: false,
-    pros: [
-      'High tensile strength and ductility',
-      'Excellent bonding with concrete',
-      'Corrosion and earthquake resistant',
-    ],
-    cons: ['Higher initial cost compared to mild steel bars.'],
-    warranty: 'Typically comes with brand certification of grade and quality.',
-    usageTips: 'Use correct diameter and spacing as per structural design. Avoid excessive bending to maintain structural properties.',
+    pros: ['Good quality control', 'Water-shield products available', 'Sustainable practices'],
+    cons: ['Slightly higher cost in some regions'],
+    warranty: 'Assured quality from Holcim group.',
+    usageTips: 'Excellent for foundations and load-bearing walls where durability is key.',
     faqs: [
-       {
-        question: 'What does Fe 500 mean?',
-        answer: 'Fe 500 denotes the yield strength of the steel bar. It means the steel can withstand a stress of 500 N/mm² before it starts to deform.'
-      }
-    ]
+      { question: 'What is special about ACC Gold Water Shield?', answer: 'It provides enhanced water resistance, making it suitable for foundations and structures in areas with high rainfall or water exposure.' },
+    ],
+  },
+  {
+    name: 'Ambuja Cement',
+    rating: 4.7,
+    tags: ['Foundation', 'Coastal areas', 'High durability'],
+    description: "Another Holcim Group company, highly reputed for sustainability and durability. Their “Ambuja Plus” is widely used in residential construction. USP: Energy efficient, high durability.",
+    priceRange: '₹370 - ₹420 per bag',
+    durability: '30-50 years',
+    brands: ['Ambuja Plus', 'Ambuja Cool Walls', 'Ambuja Ready Mix'],
+    budgetFriendly: false,
+    pros: ['High strength and durability', 'Resists salinity, good for coastal areas', 'Energy efficient production'],
+    cons: ['Premium pricing'],
+    warranty: 'Brand assurance of high quality and strength.',
+    usageTips: 'Best for foundations in coastal areas due to its resistance to salinity. Also great for strong, durable structures.',
+    faqs: [
+        { question: 'Why is Ambuja cement good for coastal areas?', answer: 'It has properties that help it resist saline and sulfate attacks, which are common in coastal environments, thus preventing corrosion of steel reinforcement.' }
+    ],
+  },
+  {
+    name: 'Shree Cement',
+    rating: 4.5,
+    tags: ['Budget-friendly', 'Foundations', 'Slabs'],
+    description: "2nd largest cement company in India by market cap. Known for affordability & high production efficiency. USP: Very cost-efficient, good balance of price & strength.",
+    priceRange: '₹340 - ₹390 per bag',
+    durability: '20-35 years',
+    brands: ['Shree Jung Rodhak Cement'],
+    budgetFriendly: true,
+    pros: ['Cost-effective', 'Good balance of price and strength', 'Anti-rust properties in some products'],
+    cons: ['May not be as premium as top-tier brands'],
+    warranty: 'Standard quality assurance.',
+    usageTips: 'A great choice for budget-friendly foundations and slabs in residential projects.',
+    faqs: [
+        { question: 'What does "Jung Rodhak" mean?', answer: '"Jung Rodhak" translates to "Rust Proof". This cement has properties that help protect the inner steel rods from rusting.' }
+    ],
+  },
+  {
+    name: 'Dalmia Cement',
+    rating: 4.6,
+    tags: ['Sulfate-rich soils', 'Eco-friendly', 'Foundation'],
+    description: "Pioneer in blended cements (slag, PPC). Strong eco-friendly focus. Known for high durability and sulfate resistance. USP: Sustainability, eco-friendly.",
+    priceRange: '₹360 - ₹400 per bag',
+    durability: '30-50 years',
+    brands: ['Dalmia DSP', 'Dalmia PPC', 'Dalmia Ready Mix'],
+    budgetFriendly: false,
+    pros: ['High durability', 'Sulfate resistance', 'Eco-friendly'],
+    cons: ['Availability might be limited in some regions'],
+    warranty: 'Focus on long-term durability and sustainability.',
+    usageTips: 'Highly recommended for foundations in areas with sulfate-rich soils or for environmentally conscious projects.',
+    faqs: [
+        { question: 'What is blended cement?', answer: 'Blended cement is created by adding other materials like fly ash or slag to ordinary Portland cement, which enhances durability and reduces the carbon footprint.' }
+    ],
+  },
+  {
+    name: 'Ramco Cements',
+    rating: 4.5,
+    tags: ['South India', 'Residential', 'Foundation'],
+    description: "South India’s strong cement brand. High consistency and reliable OPC/PPC products. USP: Best for South Indian markets, reliable supply chain.",
+    priceRange: '₹350 - ₹390 per bag',
+    durability: '25-40 years',
+    brands: ['Ramco Supergrade', 'Ramco Ready Mix'],
+    budgetFriendly: true,
+    pros: ['Strong presence in South India', 'Consistent quality', 'Reliable'],
+    cons: ['Limited availability in North India'],
+    warranty: 'Known for consistent quality and supply.',
+    usageTips: 'A go-to choice for residential houses and foundations in the southern states of India.',
+    faqs: [
+        { question: 'Is Ramco a good choice for North India?', answer: 'While Ramco is a strong brand, its availability and supply chain are more robust in South India, making it a more common choice there.' }
+    ],
+  },
+  {
+    name: 'JK Lakshmi Cement',
+    rating: 4.4,
+    tags: ['Budget-friendly', 'Mid-budget projects', 'Foundation'],
+    description: "Part of JK Organization. Affordable yet durable cement, widely used in both rural & urban builds. USP: Cost-effective, widely available.",
+    priceRange: '₹340 - ₹380 per bag',
+    durability: '20-35 years',
+    brands: ['JK Lakshmi Pro+ Cement'],
+    budgetFriendly: true,
+    pros: ['Cost-effective', 'Durable for its price point', 'Widely available'],
+    cons: ['Quality might vary slightly compared to premium brands'],
+    warranty: 'Standard quality assurance for its price segment.',
+    usageTips: 'Suitable for foundations and walls in low to mid-budget residential and commercial projects.',
+    faqs: [
+        { question: 'What is "Pro+" in the product name?', answer: 'The "Pro+" signifies an enhanced formula that offers better workability, strength, and durability compared to their standard offerings.' }
+    ],
+  },
+  {
+    name: 'India Cements',
+    rating: 4.3,
+    tags: ['Budget-friendly', 'Value for money', 'Residential'],
+    description: "One of the oldest brands, especially popular in South India. Focuses on affordability. USP: Value for money.",
+    priceRange: '₹330 - ₹370 per bag',
+    durability: '20-30 years',
+    brands: ['Sankar Super Power', 'Coromandel King'],
+    budgetFriendly: true,
+    pros: ['Very affordable', 'Good value for money', 'Strong in South India'],
+    cons: ['May not match the durability of premium brands'],
+    warranty: 'Focus on providing a budget-friendly solution.',
+    usageTips: 'A solid choice for budget-conscious residential construction, particularly in South India.',
+    faqs: [
+        { question: 'Is India Cements suitable for heavy structures?', answer: 'For standard residential buildings, it is adequate. For high-rise or heavy industrial structures, a higher-grade cement like OPC 53 from a premium brand is recommended.' }
+    ],
+  },
+  {
+    name: 'Birla Cement (MP Birla Group)',
+    rating: 4.5,
+    tags: ['North/Central India', 'Residential', 'Foundation'],
+    description: "Strong presence in Central & North India. Known for consistent quality. USP: Strong in North/Central India, reliable mid-tier brand.",
+    priceRange: '₹350 - ₹390 per bag',
+    durability: '25-40 years',
+    brands: ['Birla Perfect Plus', 'Birla Samrat'],
+    budgetFriendly: true,
+    pros: ['Consistent quality', 'Reliable mid-tier option', 'Strong distribution in North and Central India'],
+    cons: ['Less presence in South India'],
+    warranty: 'Assured quality from the MP Birla Group.',
+    usageTips: 'A reliable choice for residential and small commercial foundations in its primary markets.',
+    faqs: [
+        { question: 'Is this the same as UltraTech?', answer: 'No, this is part of the MP Birla Group, while UltraTech Cement is part of the Aditya Birla Group. They are separate entities.' }
+    ],
+  },
+  {
+    name: 'JSW Cement',
+    rating: 4.6,
+    tags: ['Eco-friendly', 'Coastal foundations', 'RCC work'],
+    description: "Known for Portland Slag Cement (PSC) blends, eco-friendly. Good durability & corrosion resistance. USP: Resistant to seawater, sustainable.",
+    priceRange: '₹340 - ₹380 per bag',
+    durability: '25-45 years',
+    brands: ['JSW PSC', 'JSW Concreel HD'],
+    budgetFriendly: true,
+    pros: ['Eco-friendly (uses industrial by-products)', 'Good corrosion resistance', 'Resistant to seawater'],
+    cons: ['PSC may have a slower setting time initially'],
+    warranty: 'Focus on sustainable and durable construction.',
+    usageTips: 'Excellent for coastal foundations and RCC work where resistance to moisture and salt is important.',
+    faqs: [
+        { question: 'What is Portland Slag Cement (PSC)?', answer: 'PSC is made by blending granulated slag (a by-product of the steel industry) with clinker. It improves the durability and long-term strength of the concrete.' }
+    ],
   },
 ];
 
@@ -131,7 +251,7 @@ const MaterialCard = ({
           <div className="mb-6">
             <p className="font-semibold text-sm flex items-center gap-2 mb-2">
               <Tag className="w-4 h-4 text-muted-foreground" /> Recommended
-              Brands:
+              Products:
             </p>
             <div className="flex flex-wrap gap-2">
               {material.brands.map((brand: string) => (
@@ -231,7 +351,7 @@ export function MaterialRecommendationTool() {
         </TabsContent>
         <TabsContent value="electrical">
           {renderContent([])}
-        </TabsContent>
+        </Tabs.Content>
         <TabsContent value="finishing">
           {renderContent([])}
         </TabsContent>
