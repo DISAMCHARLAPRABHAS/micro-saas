@@ -16,9 +16,6 @@ import { CheckCircle, XCircle, HelpCircle, Star, MessageSquare } from 'lucide-re
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { StarRating } from '../ui/star-rating';
-import { Textarea } from '../ui/textarea';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 
 
@@ -47,41 +44,7 @@ export function LearnMoreSheet({
   material,
 }: LearnMoreSheetProps) {
   const { toast } = useToast();
-  const [reviews, setReviews] = useState<Review[]>(initialReviews);
-  const [newReviewRating, setNewReviewRating] = useState(0);
-  const [newReviewComment, setNewReviewComment] = useState('');
-  const [newReviewName, setNewReviewName] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleReviewSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newReviewRating === 0 || !newReviewComment.trim() || !newReviewName.trim()) {
-        toast({
-            title: 'Incomplete Review',
-            description: 'Please provide a name, rating, and a comment.',
-            variant: 'destructive',
-        });
-        return;
-    }
-    setIsSubmitting(true);
-    setTimeout(() => {
-        const newReview: Review = {
-            name: newReviewName,
-            rating: newReviewRating,
-            comment: newReviewComment,
-            date: 'Just now',
-        }
-        setReviews([newReview, ...reviews]);
-        setNewReviewName('');
-        setNewReviewRating(0);
-        setNewReviewComment('');
-        setIsSubmitting(false);
-        toast({
-            title: 'Review Submitted!',
-            description: 'Thank you for your feedback.',
-        });
-    }, 1000);
-  }
+  const [reviews] = useState<Review[]>(initialReviews);
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -173,26 +136,6 @@ export function LearnMoreSheet({
                     ))}
                 </div>
             </div>
-             <div className="border-t pt-6">
-                 <h4 className="font-semibold mb-4">Write a Review</h4>
-                 <form onSubmit={handleReviewSubmit} className="space-y-4">
-                     <div>
-                        <Label htmlFor="review-name">Your Name</Label>
-                        <Input id="review-name" value={newReviewName} onChange={(e) => setNewReviewName(e.target.value)} placeholder="e.g. John Doe" />
-                     </div>
-                     <div>
-                        <Label>Your Rating</Label>
-                        <StarRating rating={newReviewRating} onRatingChange={setNewReviewRating} />
-                     </div>
-                     <div>
-                        <Label htmlFor="review-comment">Your Review</Label>
-                        <Textarea id="review-comment" value={newReviewComment} onChange={(e) => setNewReviewComment(e.target.value)} placeholder="What did you like or dislike?" />
-                     </div>
-                     <Button type="submit" className="w-full" disabled={isSubmitting}>
-                        {isSubmitting ? 'Submitting...' : 'Submit Review'}
-                    </Button>
-                 </form>
-             </div>
         </div>
 
         <SheetFooter className="mt-8 gap-2 sm:flex-col">
