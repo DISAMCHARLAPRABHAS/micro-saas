@@ -23,9 +23,13 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased">
-          <AppLayout>{children}</AppLayout>
-          <Toaster />
+      <body className="font-body antialiased bg-secondary">
+        <div className="flex justify-center">
+          <div className="w-full max-w-md bg-background shadow-lg relative min-h-screen flex flex-col">
+            <AppLayout>{children}</AppLayout>
+            <Toaster />
+          </div>
+        </div>
       </body>
     </html>
   );

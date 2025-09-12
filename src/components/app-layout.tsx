@@ -4,23 +4,17 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarContent,
-  SidebarTrigger,
-  SidebarSheetContent,
-  SidebarSheetHeader,
-  SidebarSheet,
 } from '@/components/ui/sidebar';
 import { AppLogo } from '@/components/app-logo';
 import { MainNav } from '@/components/main-nav';
-import { Button } from './ui/button';
-import { PanelLeft } from 'lucide-react';
-import { SheetTitle } from './ui/sheet';
 import { useState } from 'react';
+import { BottomNav } from './bottom-nav';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen flex-col md:flex-row">
+      <div className="flex flex-1 min-h-0">
         <Sidebar className="bg-card border-r hidden md:flex" collapsible="icon">
           <SidebarHeader>
             <AppLogo className="w-8 h-8" />
@@ -29,35 +23,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <MainNav />
           </SidebarContent>
         </Sidebar>
-        <div className="flex flex-col flex-1">
-          <header className="flex items-center justify-between p-2 border-b md:hidden">
-            <div className="flex items-center gap-2">
-              <AppLogo className="w-6 h-6" />
-              <h1 className="text-lg font-headline font-semibold text-primary">
-                NexaHome
-              </h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <SidebarSheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SidebarTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <PanelLeft />
-                  </Button>
-                </SidebarTrigger>
-                <SidebarSheetContent>
-                  <SidebarSheetHeader>
-                    <AppLogo className="w-8 h-8" />
-                    <SheetTitle className="text-xl font-headline font-semibold tracking-tight text-primary">
-                      NexaHome
-                    </SheetTitle>
-                  </SidebarSheetHeader>
-                  <MainNav onLinkClick={() => setIsSheetOpen(false)} />
-                </SidebarSheetContent>
-              </SidebarSheet>
-            </div>
-          </header>
-          <main className="flex-1 overflow-auto">{children}</main>
+        <div className="flex flex-col flex-1 min-h-0">
+          <main className="flex-1 overflow-auto pb-20 md:pb-0">{children}</main>
         </div>
+      </div>
+       <div className="md:hidden">
+         <BottomNav />
       </div>
     </SidebarProvider>
   );
