@@ -5,7 +5,7 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col h-full">
       <PageHeader
-        title="AI Chatbot Assistance"
+        title="NexaHome Chat"
         description="Ask me anything about home construction, materials, design, and budgeting."
       />
       <div className="flex-1 overflow-hidden">
