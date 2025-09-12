@@ -12,8 +12,28 @@ import type { MaterialRecommendationOutput } from '@/ai/flows/material-recommend
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle, XCircle, HelpCircle, Star } from 'lucide-react';
+import { CheckCircle, XCircle, HelpCircle, Star, MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
+import { StarRating } from '../ui/star-rating';
+import { Textarea } from '../ui/textarea';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { Avatar, AvatarFallback } from '../ui/avatar';
+
+
+type Review = {
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+}
+
+const initialReviews: Review[] = [
+    { name: 'Rohan Sharma', rating: 5, comment: 'Excellent durability and consistent quality. Worth the premium price for critical structural work.', date: '2 weeks ago'},
+    { name: 'Priya Singh', rating: 4, comment: 'Good material, but availability can be an issue in my region. Performance is solid otherwise.', date: '1 month ago'},
+];
+
 
 type LearnMoreSheetProps = {
   isOpen: boolean;
@@ -27,6 +47,41 @@ export function LearnMoreSheet({
   material,
 }: LearnMoreSheetProps) {
   const { toast } = useToast();
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [newReviewRating, setNewReviewRating] = useState(0);
+  const [newReviewComment, setNewReviewComment] = useState('');
+  const [newReviewName, setNewReviewName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newReviewRating === 0 || !newReviewComment.trim() || !newReviewName.trim()) {
+        toast({
+            title: 'Incomplete Review',
+            description: 'Please provide a name, rating, and a comment.',
+            variant: 'destructive',
+        });
+        return;
+    }
+    setIsSubmitting(true);
+    setTimeout(() => {
+        const newReview: Review = {
+            name: newReviewName,
+            rating: newReviewRating,
+            comment: newReviewComment,
+            date: 'Just now',
+        }
+        setReviews([newReview, ...reviews]);
+        setNewReviewName('');
+        setNewReviewRating(0);
+        setNewReviewComment('');
+        setIsSubmitting(false);
+        toast({
+            title: 'Review Submitted!',
+            description: 'Thank you for your feedback.',
+        });
+    }, 1000);
+  }
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -97,6 +152,47 @@ export function LearnMoreSheet({
                 </Accordion>
                 </div>
             )}
+
+            <div className="border-t pt-6">
+                <h4 className="font-semibold mb-4 flex items-center gap-2"><MessageSquare className="w-5 h-5"/> User Reviews ({reviews.length})</h4>
+                 <div className="space-y-4">
+                    {reviews.map((review, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                            <Avatar>
+                                <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <p className="font-semibold">{review.name}</p>
+                                    <span className="text-xs text-muted-foreground">{review.date}</span>
+                                </div>
+                                <StarRating rating={review.rating} size="sm" />
+                                <p className="text-sm text-muted-foreground mt-1">{review.comment}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+             <div className="border-t pt-6">
+                 <h4 className="font-semibold mb-4">Write a Review</h4>
+                 <form onSubmit={handleReviewSubmit} className="space-y-4">
+                     <div>
+                        <Label htmlFor="review-name">Your Name</Label>
+                        <Input id="review-name" value={newReviewName} onChange={(e) => setNewReviewName(e.target.value)} placeholder="e.g. John Doe" />
+                     </div>
+                     <div>
+                        <Label>Your Rating</Label>
+                        <StarRating rating={newReviewRating} onRatingChange={setNewReviewRating} />
+                     </div>
+                     <div>
+                        <Label htmlFor="review-comment">Your Review</Label>
+                        <Textarea id="review-comment" value={newReviewComment} onChange={(e) => setNewReviewComment(e.target.value)} placeholder="What did you like or dislike?" />
+                     </div>
+                     <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                    </Button>
+                 </form>
+             </div>
         </div>
 
         <SheetFooter className="mt-8 gap-2 sm:flex-col">
