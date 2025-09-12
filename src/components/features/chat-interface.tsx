@@ -93,7 +93,7 @@ export function ChatInterface() {
         <div className="space-y-6 pr-4">
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground pt-10">
-              <AppLogo className="mx-auto h-12 w-12 mb-4" />
+              <AppLogo className="mx-auto h-10 w-10 mb-4" />
               <p className="font-headline">Welcome to NexaHome Chat</p>
               <p>Start a conversation by typing below or uploading a file.</p>
             </div>
@@ -108,7 +108,7 @@ export function ChatInterface() {
             >
               {message.role === 'assistant' && (
                 <Avatar className="w-8 h-8 border">
-                  <AvatarFallback><AppLogo className="w-5 h-5"/></AvatarFallback>
+                  <AvatarFallback><AppLogo /></AvatarFallback>
                 </Avatar>
               )}
               <div
@@ -144,7 +144,7 @@ export function ChatInterface() {
           {isLoading && (
              <div className="flex items-start gap-3 justify-start">
               <Avatar className="w-8 h-8 border">
-                <AvatarFallback><AppLogo className="w-5 h-5"/></AvatarFallback>
+                <AvatarFallback><AppLogo /></AvatarFallback>
               </Avatar>
               <div className="rounded-lg p-3 bg-card border">
                 <LoaderCircle className="animate-spin w-5 h-5 text-primary" />
