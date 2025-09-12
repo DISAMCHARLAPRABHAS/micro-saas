@@ -1,9 +1,8 @@
 'use client';
 
 import { getChatbotResponse } from '@/app/chat/actions';
-import { AppLogo } from '@/components/app-logo';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
@@ -12,6 +11,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -93,7 +93,6 @@ export function ChatInterface() {
         <div className="space-y-6 pr-4">
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground pt-10">
-              <AppLogo className="mx-auto h-10 w-10 mb-4" />
               <p className="font-headline">Welcome to NexaHome Chat</p>
               <p>Start a conversation by typing below or uploading a file.</p>
             </div>
@@ -128,7 +127,9 @@ export function ChatInterface() {
                  {message.role === 'assistant' && (
                   <div className="flex flex-wrap gap-2 mt-4">
                     <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>✅ Save to Project</Button>
-                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>🎨 Generate Palette</Button>
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href="/color-palettes">🎨 Generate Palette</Link>
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>🏠 Show Design Ideas</Button>
                     <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>💰 Estimate Budget</Button>
                   </div>
