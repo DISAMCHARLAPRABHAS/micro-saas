@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { AppLayout } from '@/components/app-layout';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 export const metadata: Metadata = {
   title: 'NexaHome',
@@ -28,10 +29,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-secondary">
-        <div className="min-h-screen flex flex-col">
-          <AppLayout>{children}</AppLayout>
-          <Toaster />
-        </div>
+        <SidebarProvider>
+          <div className="min-h-screen flex flex-col">
+            <AppLayout>{children}</AppLayout>
+            <Toaster />
+          </div>
+        </SidebarProvider>
       </body>
     </html>
   );

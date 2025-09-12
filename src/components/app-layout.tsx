@@ -3,7 +3,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarProvider,
 } from '@/components/ui/sidebar';
 import { AppLogo } from '@/components/app-logo';
 import { MainNav } from '@/components/main-nav';
@@ -11,8 +10,9 @@ import { BottomNav } from '@/components/bottom-nav';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
-      <div className="md:flex flex-1 min-h-0 hidden">
+    <>
+      {/* Desktop Layout */}
+      <div className="hidden md:flex flex-1 min-h-0">
         <Sidebar className="bg-card border-r flex">
           <SidebarHeader className="border-b">
             <AppLogo />
@@ -28,10 +28,20 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <main className="flex-1 overflow-auto">{children}</main>
         </div>
       </div>
+
+      {/* Mobile Layout */}
       <div className="flex md:hidden flex-col flex-1 min-h-0">
+        <header className="flex items-center justify-between p-4 border-b bg-card">
+          <div className="flex items-center gap-2">
+            <AppLogo />
+            <h1 className="text-lg font-headline font-semibold text-primary">
+              NexaHome
+            </h1>
+          </div>
+        </header>
         <main className="flex-1 overflow-auto pb-20">{children}</main>
         <BottomNav />
       </div>
-    </SidebarProvider>
+    </>
   );
 }
