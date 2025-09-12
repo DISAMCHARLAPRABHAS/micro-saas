@@ -6,8 +6,9 @@ import { getSuggestionsAction } from '@/app/design-suggestions/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { UploadCloud, LoaderCircle, Lightbulb } from 'lucide-react';
+import { UploadCloud, LoaderCircle, Lightbulb, Download } from 'lucide-react';
 import type { ImageBasedDesignSuggestionsOutput } from '@/ai/flows/image-based-design-suggestions';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -69,9 +70,21 @@ export function ImageSuggestionTool() {
     setIsLoading(false);
   }
 
+  const handleGenerateMore = () => {
+    if(file) {
+      handleSubmit();
+    } else {
+      toast({
+        title: 'Upload an image first',
+        description: 'You need to upload an image to generate ideas.',
+        variant: 'destructive',
+      });
+    }
+  }
+
   return (
-    <div className="grid md:grid-cols-2 gap-8">
-      <div>
+    <div className="grid lg:grid-cols-3 gap-8">
+      <div className='lg:col-span-1 space-y-6'>
         <Card>
           <CardHeader>
             <CardTitle>Upload Your Inspiration</CardTitle>
@@ -97,22 +110,65 @@ export function ImageSuggestionTool() {
 
             {preview && (
               <div className="mt-4">
-                <p className="font-semibold mb-2">Image Preview:</p>
                 <div className="relative aspect-video w-full">
                   <Image src={preview} alt="Preview" fill className="rounded-lg object-cover" />
                 </div>
               </div>
             )}
-            
-            <Button onClick={handleSubmit} disabled={!file || isLoading} className="w-full mt-6">
-              {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-              Get Suggestions
-            </Button>
           </CardContent>
         </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Filters</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+              <div>
+                  <label className="text-sm font-medium">Style</label>
+                  <Select>
+                      <SelectTrigger><SelectValue placeholder="Select style" /></SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="modern">Modern</SelectItem>
+                          <SelectItem value="traditional">Traditional</SelectItem>
+                          <SelectItem value="minimal">Minimal</SelectItem>
+                          <SelectItem value="luxury">Luxury</SelectItem>
+                      </SelectContent>
+                  </Select>
+              </div>
+              <div>
+                  <label className="text-sm font-medium">House Type</label>
+                   <Select>
+                      <SelectTrigger><SelectValue placeholder="Select house type" /></SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="apartment">Apartment</SelectItem>
+                          <SelectItem value="villa">Villa</SelectItem>
+                          <SelectItem value="duplex">Duplex</SelectItem>
+                      </SelectContent>
+                  </Select>
+              </div>
+              <div>
+                  <label className="text-sm font-medium">Budget Level</label>
+                   <Select>
+                      <SelectTrigger><SelectValue placeholder="Select budget level" /></SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="economy">Economy</SelectItem>
+                          <SelectItem value="standard">Standard</SelectItem>
+                          <SelectItem value="premium">Premium</SelectItem>
+                      </SelectContent>
+                  </Select>
+              </div>
+          </CardContent>
+        </Card>
+         <Button onClick={handleGenerateMore} disabled={isLoading} className="w-full">
+          {isLoading ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : '🔄'}
+          {isLoading ? 'Generating...' : 'Generate More Ideas'}
+        </Button>
+        <Button variant="outline" className="w-full" onClick={() => toast({ title: 'Coming Soon!' })}>
+          <Download className="mr-2"/>
+          Download Design
+        </Button>
       </div>
       
-      <div className="space-y-4">
+      <div className="lg:col-span-2 space-y-4">
         {isLoading && (
           <Card className="flex items-center justify-center min-h-[400px]">
             <div className="text-center text-muted-foreground space-y-2">
@@ -132,27 +188,50 @@ export function ImageSuggestionTool() {
         {result && (
           <div className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Design Suggestions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="whitespace-pre-line">{result.designSuggestions}</p>
-              </CardContent>
+                <CardHeader>
+                    <CardTitle>AI Design Cards</CardTitle>
+                </CardHeader>
+                <CardContent className="grid sm:grid-cols-2 gap-4">
+                    <Card>
+                        <Image src="https://picsum.photos/seed/design1/600/400" alt="AI Design Idea 1" width={600} height={400} className="rounded-t-lg object-cover" data-ai-hint="modern minimal" />
+                        <CardContent className="pt-4">
+                            <p className="font-semibold">Modern minimal 2-floor elevation with glass balcony</p>
+                            <div className="flex flex-wrap gap-2 text-xs mt-2">
+                                <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full">Style: Modern</span>
+                                <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full">Budget: Mid-range</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <Image src="https://picsum.photos/seed/design2/600/400" alt="AI Design Idea 2" width={600} height={400} className="rounded-t-lg object-cover" data-ai-hint="concrete glass" />
+                        <CardContent className="pt-4">
+                            <p className="font-semibold">Concrete & Glass facade concept</p>
+                             <div className="flex flex-wrap gap-2 text-xs mt-2">
+                                <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full">Materials: Concrete + Glass</span>
+                                <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full">Budget: Premium</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </CardContent>
             </Card>
+
             <Card>
               <CardHeader>
-                <CardTitle>Elevation Suggestions</CardTitle>
+                <CardTitle>Smart Planning Suggestions</CardTitle>
               </CardHeader>
-              <CardContent>
-                 <p className="whitespace-pre-line">{result.elevationSuggestions}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Color Suggestions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="whitespace-pre-line">{result.colorSuggestions}</p>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-semibold">Optimize Room Layout</h4>
+                   <p className="text-muted-foreground whitespace-pre-line">{result.designSuggestions}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Lighting Ideas</h4>
+                   <p className="text-muted-foreground whitespace-pre-line">{result.colorSuggestions}</p>
+                </div>
+                 <div>
+                  <h4 className="font-semibold">Space-saving recommendations</h4>
+                   <p className="text-muted-foreground whitespace-pre-line">{result.elevationSuggestions}</p>
+                </div>
               </CardContent>
             </Card>
           </div>

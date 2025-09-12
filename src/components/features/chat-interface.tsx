@@ -2,13 +2,14 @@
 
 import { getChatbotResponse } from '@/app/chat/actions';
 import { AppLogo } from '@/components/app-logo';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { CornerDownLeft, LoaderCircle } from 'lucide-react';
+import { CornerDownLeft, LoaderCircle, Paperclip } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -20,6 +21,7 @@ export function ChatInterface() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,7 +64,7 @@ export function ChatInterface() {
             <div className="text-center text-muted-foreground pt-10">
               <AppLogo className="mx-auto h-12 w-12 mb-4" />
               <p className="font-headline">Welcome to HomeAI Chat</p>
-              <p>Start a conversation by typing below.</p>
+              <p>Start a conversation by typing below or uploading a file.</p>
             </div>
           )}
           {messages.map((message, index) => (
@@ -80,13 +82,21 @@ export function ChatInterface() {
               )}
               <div
                 className={cn(
-                  'rounded-lg p-3 max-w-lg whitespace-pre-wrap',
+                  'rounded-lg p-3 max-w-lg',
                   message.role === 'user'
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-card border'
                 )}
               >
-                {message.content}
+                <p className="whitespace-pre-wrap">{message.content}</p>
+                 {message.role === 'assistant' && (
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>✅ Save to Project</Button>
+                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>🎨 Generate Palette</Button>
+                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>🏠 Show Design Ideas</Button>
+                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>💰 Estimate Budget</Button>
+                  </div>
+                )}
               </div>
               {message.role === 'user' && (
                 <Avatar className="w-8 h-8">
@@ -111,8 +121,8 @@ export function ChatInterface() {
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about modern kitchen designs..."
-          className="pr-20 min-h-[52px]"
+          placeholder="Ask AI..."
+          className="pr-28 min-h-[52px] resize-none"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
@@ -121,18 +131,22 @@ export function ChatInterface() {
           }}
           disabled={isLoading}
         />
-        <Button
-          type="submit"
-          size="icon"
-          className="absolute right-3 top-1/2 -translate-y-1/2"
-          disabled={isLoading || !input.trim()}
-        >
-          {isLoading ? (
-            <LoaderCircle className="animate-spin" />
-          ) : (
-            <CornerDownLeft />
-          )}
-        </Button>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+           <Button type="button" size="icon" variant="ghost" disabled={isLoading} onClick={() => toast({ title: 'File upload coming soon!' })}>
+              <Paperclip />
+            </Button>
+          <Button
+            type="submit"
+            size="icon"
+            disabled={isLoading || !input.trim()}
+          >
+            {isLoading ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              <CornerDownLeft />
+            )}
+          </Button>
+        </div>
       </form>
     </div>
   );
