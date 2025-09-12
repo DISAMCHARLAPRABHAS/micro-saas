@@ -25,7 +25,7 @@ import type { MaterialRecommendationOutput } from '@/ai/flows/material-recommend
 import { GetQuoteModal } from './get-quote-modal';
 import { LearnMoreSheet } from './learn-more-sheet';
 
-const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
+const cementMaterials: MaterialRecommendationOutput['recommendations'] = [
   {
     name: 'UltraTech Cement',
     rating: 4.8,
@@ -65,7 +65,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.7,
     tags: ['Foundation', 'Coastal areas', 'High durability'],
     description: "Another Holcim Group company, highly reputed for sustainability and durability. Their “Ambuja Plus” is widely used in residential construction. USP: Energy efficient, high durability.",
-    priceRange: '₹370 - ₹420 per bag',
+    priceRange: '₹370 - ₹420/bag',
     durability: '30-50 years',
     brands: ['Ambuja Plus', 'Ambuja Cool Walls', 'Ambuja Ready Mix'],
     budgetFriendly: false,
@@ -82,7 +82,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.5,
     tags: ['Budget-friendly', 'Foundations', 'Slabs'],
     description: "2nd largest cement company in India by market cap. Known for affordability & high production efficiency. USP: Very cost-efficient, good balance of price & strength.",
-    priceRange: '₹340 - ₹390 per bag',
+    priceRange: '₹340 - ₹390/bag',
     durability: '20-35 years',
     brands: ['Shree Jung Rodhak Cement'],
     budgetFriendly: true,
@@ -99,7 +99,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.6,
     tags: ['Sulfate-rich soils', 'Eco-friendly', 'Foundation'],
     description: "Pioneer in blended cements (slag, PPC). Strong eco-friendly focus. Known for high durability and sulfate resistance. USP: Sustainability, eco-friendly.",
-    priceRange: '₹360 - ₹400 per bag',
+    priceRange: '₹360 - ₹400/bag',
     durability: '30-50 years',
     brands: ['Dalmia DSP', 'Dalmia PPC', 'Dalmia Ready Mix'],
     budgetFriendly: false,
@@ -116,7 +116,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.5,
     tags: ['South India', 'Residential', 'Foundation'],
     description: "South India’s strong cement brand. High consistency and reliable OPC/PPC products. USP: Best for South Indian markets, reliable supply chain.",
-    priceRange: '₹350 - ₹390 per bag',
+    priceRange: '₹350 - ₹390/bag',
     durability: '25-40 years',
     brands: ['Ramco Supergrade', 'Ramco Ready Mix'],
     budgetFriendly: true,
@@ -133,7 +133,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.4,
     tags: ['Budget-friendly', 'Mid-budget projects', 'Foundation'],
     description: "Part of JK Organization. Affordable yet durable cement, widely used in both rural & urban builds. USP: Cost-effective, widely available.",
-    priceRange: '₹340 - ₹380 per bag',
+    priceRange: '₹340 - ₹380/bag',
     durability: '20-35 years',
     brands: ['JK Lakshmi Pro+ Cement'],
     budgetFriendly: true,
@@ -150,7 +150,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.3,
     tags: ['Budget-friendly', 'Value for money', 'Residential'],
     description: "One of the oldest brands, especially popular in South India. Focuses on affordability. USP: Value for money.",
-    priceRange: '₹330 - ₹370 per bag',
+    priceRange: '₹330 - ₹370/bag',
     durability: '20-30 years',
     brands: ['Sankar Super Power', 'Coromandel King'],
     budgetFriendly: true,
@@ -167,7 +167,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.5,
     tags: ['North/Central India', 'Residential', 'Foundation'],
     description: "Strong presence in Central & North India. Known for consistent quality. USP: Strong in North/Central India, reliable mid-tier brand.",
-    priceRange: '₹350 - ₹390 per bag',
+    priceRange: '₹350 - ₹390/bag',
     durability: '25-40 years',
     brands: ['Birla Perfect Plus', 'Birla Samrat'],
     budgetFriendly: true,
@@ -184,7 +184,7 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     rating: 4.6,
     tags: ['Eco-friendly', 'Coastal foundations', 'RCC work'],
     description: "Known for Portland Slag Cement (PSC) blends, eco-friendly. Good durability & corrosion resistance. USP: Resistant to seawater, sustainable.",
-    priceRange: '₹340 - ₹380 per bag',
+    priceRange: '₹340 - ₹380/bag',
     durability: '25-45 years',
     brands: ['JSW PSC', 'JSW Concreel HD'],
     budgetFriendly: true,
@@ -197,6 +197,160 @@ const initialMaterialData: MaterialRecommendationOutput['recommendations'] = [
     ],
   },
 ];
+
+const steelMaterials: MaterialRecommendationOutput['recommendations'] = [
+  {
+    name: 'Tata Tiscon',
+    rating: 4.8,
+    tags: ['Popular', 'GreenPro Certified', 'Super-ductile'],
+    description: 'Very popular, GreenPro certified. Offers super-ductile grades (e.g. Fe 500 SD). Reliable quality & good bending/weldability.',
+    priceRange: '₹55,000 - ₹65,000 per ton',
+    durability: '50+ years',
+    brands: ['Tata Tiscon 500 SD'],
+    budgetFriendly: false,
+    pros: ['High ductility', 'Reliable quality', 'Good for seismic zones'],
+    cons: ['Premium pricing'],
+    warranty: 'Assured quality and performance.',
+    usageTips: 'Ideal for residential and commercial projects requiring high strength and flexibility.',
+    faqs: [{ question: 'What does "SD" stand for?', answer: '"SD" stands for Super Ductile, which provides a higher level of seismic resistance.' }],
+  },
+  {
+    name: 'JSW Neosteel',
+    rating: 4.7,
+    tags: ['Premium', 'High load', 'Ductile'],
+    description: 'Strong, ductile, good for high load/mass structures. Premium quality.',
+    priceRange: '₹58,000 - ₹68,000 per ton',
+    durability: '50+ years',
+    brands: ['JSW Neosteel Fe 550D'],
+    budgetFriendly: false,
+    pros: ['High strength', 'Excellent ductility', 'Suitable for heavy structures'],
+    cons: ['Higher cost'],
+    warranty: 'Guaranteed quality for high-performance applications.',
+    usageTips: 'Use in critical structural elements like columns and beams in high-rise buildings.',
+    faqs: [],
+  },
+  {
+    name: 'Jindal Panther',
+    rating: 4.7,
+    tags: ['High Strength', 'Weldability', 'HYQST'],
+    description: 'HYQST technology, high strength grades (Fe 550D etc.), good weldability.',
+    priceRange: '₹54,000 - ₹64,000 per ton',
+    durability: '40-50 years',
+    brands: ['Jindal Panther Fe 550D'],
+    budgetFriendly: false,
+    pros: ['High strength grades', 'Good weldability', 'Advanced manufacturing process'],
+    cons: ['Premium pricing'],
+    warranty: 'Consistent mechanical properties.',
+    usageTips: 'Suitable for projects where welding is required for reinforcement cages.',
+    faqs: [],
+  },
+  {
+    name: 'SRMB Steel',
+    rating: 4.6,
+    tags: ['Seismic zones', 'Tempcore licensed', 'Good grip'],
+    description: 'Known for Tempcore® licensed manufacturing, good grip & rib pattern, reliable for seismic zones.',
+    priceRange: '₹52,000 - ₹62,000 per ton',
+    durability: '40-50 years',
+    brands: ['SRMB Fe 500D'],
+    budgetFriendly: true,
+    pros: ['Reliable for seismic zones', 'Good concrete grip', 'Licensed technology'],
+    cons: ['Regional availability can vary'],
+    warranty: 'Assured quality for earthquake-prone areas.',
+    usageTips: 'The unique rib pattern ensures a strong bond with concrete.',
+    faqs: [],
+  },
+  {
+    name: 'SAIL',
+    rating: 4.5,
+    tags: ['Government-backed', 'Heavy duty', 'Corrosion resistant'],
+    description: 'Government‐backed, large capacity, good for basic & heavy duty structural use. Has high corrosion resistant bars (HCR).',
+    priceRange: '₹50,000 - ₹60,000 per ton',
+    durability: '40+ years',
+    brands: ['SAIL TMT HCR'],
+    budgetFriendly: true,
+    pros: ['Corrosion resistant options', 'Widely used in government projects', 'Reliable supply'],
+    cons: ['May lack some premium features'],
+    warranty: 'Standard government quality assurance.',
+    usageTips: 'A dependable choice for a wide range of construction projects, especially with HCR variants in corrosive environments.',
+    faqs: [],
+  },
+  {
+    name: 'Shyam Steel',
+    rating: 4.5,
+    tags: ['Good value', 'Durable', 'Tough'],
+    description: 'Good value, reliable Fe 500D / Fe 550D grades, offers toughness and durability.',
+    priceRange: '₹51,000 - ₹61,000 per ton',
+    durability: '35-45 years',
+    brands: ['Shyam Steel Fe 500D'],
+    budgetFriendly: true,
+    pros: ['Good value for money', 'Tough and durable', 'Reliable grades'],
+    cons: ['Less known than top-tier brands'],
+    warranty: 'Focus on providing a balance of cost and quality.',
+    usageTips: 'A solid choice for residential and mid-sized commercial projects.',
+    faqs: [],
+  },
+  {
+    name: 'Vizag Steel (RINL)',
+    rating: 4.6,
+    tags: ['Virgin ore', 'High purity', 'Coastal areas'],
+    description: 'Made from virgin ore; good purity; often used in coastal / corrosion‐sensitive areas.',
+    priceRange: '₹53,000 - ₹63,000 per ton',
+    durability: '40-50 years',
+    brands: ['Vizag TMT'],
+    budgetFriendly: false,
+    pros: ['High purity steel', 'Good for coastal areas', 'Made from virgin ore'],
+    cons: ['Can be more expensive'],
+    warranty: 'High quality assurance due to raw material purity.',
+    usageTips: 'Recommended for structures in corrosive environments like coastal regions.',
+    faqs: [],
+  },
+  {
+    name: 'Kamdhenu',
+    rating: 4.3,
+    tags: ['Affordable', 'Decent quality', 'Wide presence'],
+    description: 'Affordable yet decent quality; multiple plants; has good presence & supply.',
+    priceRange: '₹48,000 - ₹58,000 per ton',
+    durability: '30-40 years',
+    brands: ['Kamdhenu Nxt'],
+    budgetFriendly: true,
+    pros: ['Affordable', 'Good availability', 'Decent quality for the price'],
+    cons: ['May not match the performance of premium brands'],
+    warranty: 'Standard quality for budget-friendly projects.',
+    usageTips: 'A popular choice for budget-conscious builders in residential construction.',
+    faqs: [],
+  },
+  {
+    name: 'Essar TMT',
+    rating: 4.4,
+    tags: ['Western India', 'Mechanical strength', 'Elongation'],
+    description: 'Strong performance in Western India; good mechanical strength and elongation.',
+    priceRange: '₹52,000 - ₹62,000 per ton',
+    durability: '35-45 years',
+    brands: ['Essar TMT'],
+    budgetFriendly: true,
+    pros: ['Good mechanical strength', 'Strong presence in Western India', 'Good elongation'],
+    cons: ['Regional focus'],
+    warranty: 'Reliable performance for its target market.',
+    usageTips: 'A good option for projects located in the western regions of India.',
+    faqs: [],
+  },
+  {
+    name: 'Prime Gold',
+    rating: 4.4,
+    tags: ['Rising brand', 'Quality ribs', 'Reinforcement'],
+    description: 'Rising brand, known for quality rib patterns, good for reinforcement needs.',
+    priceRange: '₹49,000 - ₹59,000 per ton',
+    durability: '30-40 years',
+    brands: ['Prime Gold TMT'],
+    budgetFriendly: true,
+    pros: ['Good rib pattern for grip', 'Affordable', 'Growing brand recognition'],
+    cons: ['Newer compared to established players'],
+    warranty: 'Focus on providing quality reinforcement bars at a competitive price.',
+    usageTips: 'Suitable for general reinforcement needs in small to medium-sized projects.',
+    faqs: [],
+  },
+];
+
 
 const MaterialCard = ({
   material,
@@ -291,7 +445,7 @@ const MaterialCard = ({
 };
 
 export function MaterialRecommendationTool() {
-  const [recommendations] = useState(initialMaterialData);
+  const { toast } = useToast();
 
   const renderContent = (
     categoryMaterials: MaterialRecommendationOutput['recommendations']
@@ -341,7 +495,16 @@ export function MaterialRecommendationTool() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="foundation">
-          {renderContent(recommendations)}
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-xl font-bold font-headline mb-4">M25 Concrete</h3>
+                {renderContent(cementMaterials)}
+              </div>
+              <div>
+                <h3 className="text-xl font-bold font-headline mb-4">Steel (TMT Bars)</h3>
+                {renderContent(steelMaterials)}
+              </div>
+            </div>
         </TabsContent>
         <TabsContent value="walls">
           {renderContent([])}
