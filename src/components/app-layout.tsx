@@ -9,14 +9,12 @@ import { MainNav } from '@/components/main-nav';
 import { BottomNav } from '@/components/bottom-nav';
 import { UserNav } from '@/components/user-nav';
 import { useAuth } from '@/hooks/use-auth';
+import { Button } from './ui/button';
+import Link from 'next/link';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   
-  if (!user) {
-    return <main className="flex-1">{children}</main>;
-  }
-
   return (
     <>
       {/* Desktop Layout */}

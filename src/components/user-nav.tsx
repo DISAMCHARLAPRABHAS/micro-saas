@@ -14,6 +14,7 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export function UserNav() {
@@ -26,7 +27,16 @@ export function UserNav() {
   };
 
   if (!user) {
-    return null;
+    return (
+      <div className="flex items-center gap-2">
+        <Button asChild variant="ghost">
+          <Link href="/login">Log In</Link>
+        </Button>
+        <Button asChild>
+          <Link href="/signup">Sign Up</Link>
+        </Button>
+      </div>
+    );
   }
 
   return (
