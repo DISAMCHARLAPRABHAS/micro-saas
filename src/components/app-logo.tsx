@@ -11,7 +11,7 @@ export function AppLogo(props: SVGProps<SVGSVGElement>) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn('w-8 h-8', props.className)}
+      className={cn('w-6 h-6', props.className)}
       {...props}
     >
       <path
