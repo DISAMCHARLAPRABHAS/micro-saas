@@ -4,7 +4,6 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarContent,
-  SidebarInset,
   SidebarTrigger,
   SidebarSheetContent,
   SidebarSheetHeader,
