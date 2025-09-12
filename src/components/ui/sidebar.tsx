@@ -60,8 +60,10 @@ function SidebarProvider({
   React.useEffect(() => {
     if (isMobile) {
       setIsCollapsed(true)
+    } else {
+      setIsCollapsed(defaultCollapsed)
     }
-  }, [isMobile])
+  }, [isMobile, defaultCollapsed])
 
   const handleCollapse = () => {
     setIsCollapsed(true)
@@ -81,7 +83,7 @@ function SidebarProvider({
       onCollapse: handleCollapse,
       onExpand: handleExpand,
     }),
-    [isMobile, isCollapsed, isCollapsible]
+    [isMobile, isCollapsed, isCollapsible, handleCollapse, handleExpand]
   )
 
   return (
@@ -192,9 +194,7 @@ const SidebarInset = React.forwardRef<HTMLDivElement, SidebarInsetProps>(
     const { isCollapsed, isMobile } = useSidebar()
 
     if (isMobile) {
-      return (
-        <div ref={ref} className={cn(className, "flex-1 flex flex-col")} {...props} />
-      )
+      return null;
     }
 
     return (
@@ -225,7 +225,13 @@ const SidebarSheet = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof Sheet>
 >(({ className, children, ...props }, ref) => {
   const { isMobile } = useSidebar();
-  if (!isMobile) return null;
+  if (!isMobile) {
+    const childrenArray = React.Children.toArray(children);
+    const mainContent = childrenArray.find(
+      (child) => (child as React.ReactElement).type !== SidebarSheetContent
+    );
+    return <>{mainContent}</>
+  }
   return (
     <Sheet ref={ref} {...props}>
       {children}
