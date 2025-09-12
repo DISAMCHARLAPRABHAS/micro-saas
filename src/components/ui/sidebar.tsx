@@ -6,7 +6,6 @@ import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Button, type ButtonProps } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { useIsMobile } from "@/hooks/use-mobile"
 import {
   Sheet,
   SheetContent,
@@ -18,7 +17,6 @@ import {
 } from "@radix-ui/react-tooltip"
 
 type SidebarContextProps = {
-  isMobile: boolean
   isCollapsed: boolean
   isCollapsible: boolean
   onCollapse: () => void
@@ -52,18 +50,9 @@ function SidebarProvider({
   onCollapse,
   onExpand,
 }: SidebarProviderProps) {
-  const isMobile = useIsMobile()
   const isCollapsible = !!collapsible
 
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
-
-  React.useEffect(() => {
-    if (isMobile) {
-      setIsCollapsed(true)
-    } else {
-      setIsCollapsed(defaultCollapsed)
-    }
-  }, [isMobile, defaultCollapsed])
 
   const handleCollapse = () => {
     setIsCollapsed(true)
@@ -77,13 +66,12 @@ function SidebarProvider({
 
   const value = React.useMemo(
     () => ({
-      isMobile,
       isCollapsed,
       isCollapsible,
       onCollapse: handleCollapse,
       onExpand: handleExpand,
     }),
-    [isMobile, isCollapsed, isCollapsible, handleCollapse, handleExpand]
+    [isCollapsed, isCollapsible, handleCollapse, handleExpand]
   )
 
   return (
@@ -94,7 +82,7 @@ function SidebarProvider({
 }
 
 const sidebarVariants = cva(
-  "hidden h-full flex-col transition-all duration-300 ease-in-out md:flex",
+  "h-full flex-col transition-all duration-300 ease-in-out",
   {
     variants: {
       isCollapsed: {
@@ -114,18 +102,12 @@ type SidebarProps = React.ComponentProps<"aside"> & {
 
 const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
   ({ className, children, ...props }, ref) => {
-    const { isCollapsed, isCollapsible, isMobile } = useSidebar()
-    const collapsibleType = isCollapsible ? "icon" : undefined
-
-    if (isMobile) {
-      return null
-    }
-
+    const { isCollapsed } = useSidebar()
+    
     return (
       <aside
         ref={ref}
         className={cn(sidebarVariants({ isCollapsed }), className)}
-        data-collapsible={collapsibleType}
         {...props}
       >
         <div className="flex h-full flex-col">{children}</div>
@@ -178,68 +160,8 @@ const SidebarFooter = React.forwardRef<
 })
 SidebarFooter.displayName = "SidebarFooter"
 
-const sidebarInsetVariants = cva("transition-all duration-300 ease-in-out", {
-  variants: {
-    isCollapsed: {
-      true: "md:pl-14",
-      false: "md:pl-64",
-    },
-  },
-})
-
-type SidebarInsetProps = React.ComponentProps<"div">
-
-const SidebarInset = React.forwardRef<HTMLDivElement, SidebarInsetProps>(
-  ({ className, ...props }, ref) => {
-    const { isCollapsed, isMobile } = useSidebar()
-
-    if (isMobile) {
-      return null;
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={cn(sidebarInsetVariants({ isCollapsed }), className)}
-        {...props}
-      />
-    )
-  }
-)
-SidebarInset.displayName = "SidebarInset"
-
-type SidebarTriggerProps = ButtonProps
-
-const SidebarTrigger = React.forwardRef<
-  HTMLButtonElement,
-  SidebarTriggerProps
->(({ className, ...props }, ref) => {
-  const { isMobile } = useSidebar()
-  if (!isMobile) return null
-  return <SheetTrigger ref={ref} className={cn(className)} {...props} />
-})
-SidebarTrigger.displayName = "SidebarTrigger"
-
-const SidebarSheet = React.forwardRef<
-  React.ElementRef<typeof Sheet>,
-  React.ComponentPropsWithoutRef<typeof Sheet>
->(({ className, children, ...props }, ref) => {
-  const { isMobile } = useSidebar();
-  if (!isMobile) {
-    const childrenArray = React.Children.toArray(children);
-    const mainContent = childrenArray.find(
-      (child) => (child as React.ReactElement).type !== SidebarSheetContent
-    );
-    return <>{mainContent}</>
-  }
-  return (
-    <Sheet ref={ref} {...props}>
-      {children}
-    </Sheet>
-  );
-});
-SidebarSheet.displayName = "SidebarSheet"
-
+const SidebarSheet = Sheet
+const SidebarTrigger = SheetTrigger
 
 const SidebarSheetContent = React.forwardRef<
   React.ElementRef<typeof SheetContent>,
@@ -329,7 +251,6 @@ export {
   SidebarHeader,
   SidebarContent,
   SidebarFooter,
-  SidebarInset,
   SidebarTrigger,
   SidebarSheet,
   SidebarSheetContent,
