@@ -193,7 +193,7 @@ const SidebarInset = React.forwardRef<HTMLDivElement, SidebarInsetProps>(
 
     if (isMobile) {
       return (
-        <div ref={ref} className={cn(className)} {...props} />
+        <div ref={ref} className={cn(className, "flex-1 flex flex-col")} {...props} />
       )
     }
 
@@ -216,7 +216,7 @@ const SidebarTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const { isMobile } = useSidebar()
   if (!isMobile) return null
-  return <SheetTrigger ref={ref} className={cn(className)} {...props} asChild />
+  return <SheetTrigger ref={ref} className={cn(className)} {...props} />
 })
 SidebarTrigger.displayName = "SidebarTrigger"
 

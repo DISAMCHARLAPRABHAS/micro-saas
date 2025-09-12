@@ -31,6 +31,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           </SidebarContent>
         </Sidebar>
         <SidebarInset className="flex flex-col flex-1">
+          <main className="flex-1 overflow-auto">{children}</main>
+        </SidebarInset>
+        <SidebarSheet>
           <header className="flex items-center justify-between p-2 border-b md:hidden">
             <div className="flex items-center gap-2">
               <AppLogo className="w-6 h-6"/>
@@ -40,9 +43,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <Button variant="ghost" size="icon"><PanelLeft /></Button>
             </SidebarTrigger>
           </header>
-          <main className="flex-1 overflow-auto">{children}</main>
-        </SidebarInset>
-        <SidebarSheet>
           <SidebarSheetContent>
               <SidebarSheetHeader>
                   <AppLogo className="w-8 h-8" />
