@@ -25,7 +25,7 @@ import type { MaterialRecommendationOutput } from '@/ai/flows/material-recommend
 import { GetQuoteModal } from './get-quote-modal';
 import { LearnMoreSheet } from './learn-more-sheet';
 
-const cementMaterials: MaterialRecommendationOutput['recommendations'] = [
+const concreteMaterials: MaterialRecommendationOutput['recommendations'] = [
   {
     name: 'UltraTech Cement',
     rating: 4.8,
@@ -498,7 +498,7 @@ export function MaterialRecommendationTool() {
             <div className="space-y-8">
               <div>
                 <h3 className="text-xl font-bold font-headline mb-4">M25 Concrete</h3>
-                {renderContent(cementMaterials)}
+                {renderContent(concreteMaterials)}
               </div>
               <div>
                 <h3 className="text-xl font-bold font-headline mb-4">Steel (TMT Bars)</h3>
