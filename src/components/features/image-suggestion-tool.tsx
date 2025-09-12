@@ -104,9 +104,9 @@ export function ImageSuggestionTool() {
             </div>
 
             {preview && (
-              <div className="mt-4">
+              <div className="mt-4 rounded-lg bg-muted p-2">
                 <div className="relative aspect-video w-full">
-                  <Image src={preview} alt="Preview" fill className="rounded-lg object-cover" />
+                  <Image src={preview} alt="Preview" fill className="rounded-md object-contain" />
                 </div>
               </div>
             )}
