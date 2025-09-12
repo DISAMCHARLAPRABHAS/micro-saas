@@ -94,7 +94,7 @@ export function ChatInterface() {
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground pt-10">
               <AppLogo className="mx-auto h-12 w-12 mb-4" />
-              <p className="font-headline">Welcome to HomeAI Chat</p>
+              <p className="font-headline">Welcome to NexaHome Chat</p>
               <p>Start a conversation by typing below or uploading a file.</p>
             </div>
           )}

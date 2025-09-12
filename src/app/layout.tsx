@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'HomeAI',
+  title: 'NexaHome',
   description: 'AI-powered home design and construction assistant',
 };
 

@@ -34,7 +34,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-2">
               <AppLogo className="w-6 h-6" />
               <h1 className="text-lg font-headline font-semibold text-primary">
-                HomeAI
+                NexaHome
               </h1>
             </div>
             <div className="flex items-center gap-2">
@@ -48,7 +48,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   <SidebarSheetHeader>
                     <AppLogo className="w-8 h-8" />
                     <SheetTitle className="text-xl font-headline font-semibold tracking-tight text-primary">
-                      HomeAI
+                      NexaHome
                     </SheetTitle>
                   </SidebarSheetHeader>
                   <MainNav onLinkClick={() => setIsSheetOpen(false)} />
