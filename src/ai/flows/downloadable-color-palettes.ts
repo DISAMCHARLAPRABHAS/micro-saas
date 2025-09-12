@@ -10,6 +10,19 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
+const ColorSchema = z.object({
+  name: z.string().describe('The name of the color.'),
+  hex: z.string().describe('The HEX code of the color.'),
+  rgb: z.string().describe('The RGB code of the color.'),
+  suggestedUse: z.string().describe('Suggested use for the color (e.g., Walls, Ceiling, Accent).'),
+});
+
+const PaletteSchema = z.object({
+  paletteName: z.string().describe('The name of the color palette.'),
+  description: z.string().describe('A description of the color palette.'),
+  colors: z.array(ColorSchema).describe('An array of color objects.'),
+});
+
 const GenerateColorPaletteInputSchema = z.object({
   designScheme: z
     .string()!
@@ -26,16 +39,9 @@ const GenerateColorPaletteInputSchema = z.object({
 export type GenerateColorPaletteInput = z.infer<typeof GenerateColorPaletteInputSchema>;
 
 const GenerateColorPaletteOutputSchema = z.object({
-  paletteName: z.string().describe('The name of the color palette.'),
-  description: z.string().describe('A description of the color palette.'),
-  colors: z.array(
-    z.object({
-      name: z.string().describe('The name of the color.'),
-      hex: z.string().describe('The HEX code of the color.'),
-      rgb: z.string().describe('The RGB code of the color.'),
-    })
-  ).describe('An array of color objects, each containing the name, HEX code, and RGB code.'),
+  palettes: z.array(PaletteSchema).describe('An array of generated color palettes.'),
 });
+
 export type GenerateColorPaletteOutput = z.infer<typeof GenerateColorPaletteOutputSchema>;
 
 export async function generateColorPalette(input: GenerateColorPaletteInput): Promise<GenerateColorPaletteOutput> {
@@ -48,14 +54,14 @@ const generateColorPalettePrompt = ai.definePrompt({
   output: {schema: GenerateColorPaletteOutputSchema},
   prompt: `You are a professional color palette generator for home designs.
 
-  Based on the design scheme provided by the user, generate a color palette with the specified number of colors.
+  Based on the design scheme provided by the user, generate 3 distinct color palettes.
+  Each palette should have a name, a description, and an array of colors with the specified number of colors. Each color should have a name, HEX code, RGB code, and a suggested use (e.g., Walls, Ceiling, Accent).
+  Make sure to generate real and valid HEX and RGB codes. The RGB code should be in the format "rgb(red, green, blue)" where red, green, and blue are integers between 0 and 255.
+  Make sure each palette is visually appealing and suitable for the specified design scheme.
 
   Design Scheme: {{{designScheme}}}
-  Number of Colors: {{{numberOfColors}}}
-
-  The color palette should include a name, description, and an array of colors. Each color should have a name, HEX code, and RGB code.
-  Make sure to generate real and valid HEX and RGB codes. The RGB code should be in the format "rgb(red, green, blue)" where red, green, and blue are integers between 0 and 255.
-  Make sure the palette is visually appealing and suitable for the specified design scheme.`, 
+  Number of Colors in each palette: {{{numberOfColors}}}
+  `,
 });
 
 const generateColorPaletteFlow = ai.defineFlow(

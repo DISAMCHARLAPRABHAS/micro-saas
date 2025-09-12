@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "room-mockup",
+      "description": "Living room interior mockup.",
+      "imageUrl": "https://picsum.photos/seed/room-mockup/800/450",
+      "imageHint": "living room"
+    },
+    {
+      "id": "design1",
+      "description": "AI design idea 1",
+      "imageUrl": "https://picsum.photos/seed/design1/600/400",
+      "imageHint": "modern minimal"
+    },
+    {
+      "id": "design2",
+      "description": "AI design idea 2",
+      "imageUrl": "https://picsum.photos/seed/design2/600/400",
+      "imageHint": "concrete glass"
+    }
+  ]
 }
