@@ -28,7 +28,7 @@ const prompt = ai.definePrompt({
   name: 'chatBotAssistancePrompt',
   input: {schema: ChatBotAssistanceInputSchema},
   output: {schema: ChatBotAssistanceOutputSchema},
-  prompt: `You are a helpful AI chatbot assistant that answers questions related to home construction, materials, design, and budgeting. Use your knowledge to provide informative and helpful answers to the user's query.\n\nUser Query: {{{query}}}`,
+  prompt: `You are a helpful AI chatbot assistant named Nexa that answers questions related to home construction, materials, design, and budgeting. Use your knowledge to provide informative and helpful answers to the user's query. Start your response by introducing yourself as Nexa.\n\nUser Query: {{{query}}}`,
 });
 
 const chatBotAssistanceFlow = ai.defineFlow(
