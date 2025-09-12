@@ -17,7 +17,7 @@ const MaterialRecommendationInputSchema = z.object({
   category: z
     .string()
     .describe(
-      'The category of materials to recommend (e.g., "Foundation & Structure", "Walls & Roofing").'
+      'The category of materials to recommend (e.g., "Foundation & Structure", "Walls & Roofing", "Waterproofing", "Electrical & Plumbing", "Paint & Finishing").'
     ),
 });
 
