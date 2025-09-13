@@ -8,24 +8,28 @@ import {
   Wrench,
   Palette,
   LayoutTemplate,
+  Home,
+  Bot,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button, buttonVariants } from './ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const menuItems = [
   {
-    path: '/chat',
-    label: 'Chat',
-    icon: MessageSquare,
-  },
-  {
-    path: '/design-suggestions',
-    label: 'Design',
-    icon: ImageIcon,
-  },
-  {
     path: '/planning-ideas',
-    label: 'Planning',
-    icon: LayoutTemplate,
+    label: 'Home',
+    icon: Home,
+    desktopLabel: 'Home (Planning)',
+  },
+  {
+    path: '/color-palettes',
+    label: 'Colors',
+    icon: Palette,
   },
   {
     path: '/materials',
@@ -33,60 +37,72 @@ const menuItems = [
     icon: Wrench,
   },
   {
-    path: '/color-palettes',
-    label: 'Colors',
-    icon: Palette,
+    path: '/design-suggestions',
+    label: 'Design Ideas',
+    icon: ImageIcon,
+  },
+  {
+    path: '/chat',
+    label: 'Chatbot',
+    icon: Bot,
   },
 ];
 
 type MainNavProps = {
-  onLinkClick?: () => void;
   isMobile?: boolean;
 };
 
-export function MainNav({ onLinkClick, isMobile = false }: MainNavProps) {
+export function MainNav({ isMobile = false }: MainNavProps) {
   const pathname = usePathname();
 
   if (isMobile) {
     return (
       <nav className="flex justify-around items-center h-full">
         {menuItems.map(item => (
-          <Link
-            href={item.path}
-            key={item.path}
-            className={cn(
-              'flex flex-col items-center justify-center gap-1 w-full h-full',
-              pathname.startsWith(item.path)
-                ? 'text-primary'
-                : 'text-muted-foreground'
-            )}
-            onClick={onLinkClick}
-          >
-            <item.icon className="w-5 h-5 shrink-0" />
-            <span className="text-xs font-medium">{item.label}</span>
-          </Link>
+          <Tooltip key={item.path}>
+            <TooltipTrigger asChild>
+              <Link
+                href={item.path}
+                className={cn(
+                  'flex flex-col items-center justify-center gap-1 w-full h-full text-xs',
+                  pathname.startsWith(item.path)
+                    ? 'text-primary'
+                    : 'text-muted-foreground'
+                )}
+              >
+                <item.icon className="w-5 h-5 shrink-0" />
+                <span className="font-medium">{item.label}</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{item.desktopLabel || item.label}</p>
+            </TooltipContent>
+          </Tooltip>
         ))}
       </nav>
     );
   }
 
   return (
-    <nav className="p-4 space-y-2">
-      {menuItems.map(item => (
-        <Link
-          href={item.path}
-          key={item.path}
-          className={cn(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium',
-            pathname.startsWith(item.path)
-              ? 'bg-primary text-primary-foreground'
-              : 'text-foreground hover:bg-muted'
+    <nav className="hidden md:flex items-center gap-1">
+      {menuItems.map((item, index) => (
+        <React.Fragment key={item.path}>
+          <Link
+            href={item.path}
+            className={cn(
+              buttonVariants({
+                variant: pathname.startsWith(item.path) ? 'secondary' : 'ghost',
+                size: 'sm',
+              }),
+              'font-normal'
+            )}
+          >
+            {item.desktopLabel || item.label}
+          </Link>
+          {index < menuItems.length - 1 && (
+            <span className="text-muted-foreground/50">|</span>
           )}
-          onClick={onLinkClick}
-        >
-          <item.icon className="w-5 h-5 shrink-0" />
-          <span>{item.label}</span>
-        </Link>
+        </React.Fragment>
       ))}
     </nav>
   );
