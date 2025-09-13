@@ -12,7 +12,7 @@ export const housePlans: HousePlan[] = [
     title: 'Compact 2BHK with Pooja Room',
     description:
       'A practical design for smaller plots, featuring two bedrooms, a living area, kitchen, and a dedicated pooja (prayer) room, which is a common requirement in Indian homes.',
-    imageUrl: 'https://picsum.photos/seed/compact-2bhk/600/400',
-    imageHint: '2bhk floor plan',
+    imageUrl: 'https://picsum.photos/seed/house-plan-1/400/300',
+    imageHint: 'house floor plan',
   },
 ];

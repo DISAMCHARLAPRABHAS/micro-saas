@@ -47,9 +47,9 @@ export function PlanCard({ plan }: PlanCardProps) {
           <Image
             src={plan.imageUrl}
             alt={plan.title}
-            width={600}
-            height={400}
-            className="transition-transform duration-300"
+            width={400}
+            height={300}
+            className="transition-transform duration-300 w-full"
             style={{ transform: `scale(${scale})` }}
             data-ai-hint={plan.imageHint}
           />
