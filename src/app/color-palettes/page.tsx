@@ -63,7 +63,7 @@ const popularPalettes = [
 const brandColors = [
   {
     brand: 'Asian Paints',
-    logo: 'https://seeklogo.com/images/A/asian-paints-logo-6982234B6B-seeklogo.com.png',
+    logo: 'https://picsum.photos/seed/asianpaints/40/40',
     popularShades: [
       { name: 'Royale Aspira', code: 'AP-123', hex: '#F5F5DC' },
       { name: 'Apex Ultima', code: 'AP-456', hex: '#A0522D' },
@@ -72,7 +72,7 @@ const brandColors = [
   },
   {
     brand: 'Berger Paints',
-    logo: 'https://seeklogo.com/images/B/berger-logo-94032171F4-seeklogo.com.png',
+    logo: 'https://picsum.photos/seed/berger/40/40',
     popularShades: [
       { name: 'Silk Glamour', code: 'BP-101', hex: '#FFF5EE' },
       { name: 'WeatherCoat', code: 'BP-202', hex: '#8FBC8F' },
@@ -81,7 +81,7 @@ const brandColors = [
   },
   {
     brand: 'Nerolac',
-    logo: 'https://seeklogo.com/images/K/kansai-nerolac-paints-logo-699B5215E5-seeklogo.com.png',
+    logo: 'https://picsum.photos/seed/nerolac/40/40',
     popularShades: [
       { name: 'Impressions', code: 'NP-111', hex: '#FFE4B5' },
       { name: 'Suraksha', code: 'NP-222', hex: '#4682B4' },
@@ -90,7 +90,7 @@ const brandColors = [
   },
   {
     brand: 'Dulux',
-    logo: 'https://seeklogo.com/images/D/dulux-logo-27364D90F3-seeklogo.com.png',
+    logo: 'https://picsum.photos/seed/dulux/40/40',
     popularShades: [
       { name: 'Velvet Touch', code: 'DL-777', hex: '#E6E6FA' },
       { name: 'Weathershield', code: 'DL-888', hex: '#BDB76B' },
@@ -157,7 +157,7 @@ export default function ColorSectionPage() {
               {brandColors.map((brand) => (
                 <Card key={brand.brand}>
                   <CardHeader className="flex flex-row items-center gap-4">
-                     <Image src={brand.logo} alt={`${brand.brand} logo`} width={40} height={40} className="rounded-md" />
+                     <Image src={brand.logo} alt={`${brand.brand} logo`} width={40} height={40} className="rounded-md" data-ai-hint={`${brand.brand} logo`} />
                     <CardTitle>{brand.brand}</CardTitle>
                   </CardHeader>
                   <CardContent>
