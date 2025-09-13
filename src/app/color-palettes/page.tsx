@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Download, Palette, Wand2, Paintbrush } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
+import { Separator } from '@/components/ui/separator';
 
 const popularPalettes = [
   {
@@ -108,16 +109,18 @@ export default function ColorSectionPage() {
       />
       <div className="flex-1 overflow-y-auto p-6 pt-0">
         <Tabs defaultValue="library" className="w-full">
-          <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 mb-6 h-auto flex-wrap md:h-10">
-            <TabsTrigger value="library">
+          <TabsList className="bg-transparent p-0 justify-start h-auto mb-6 gap-4">
+            <TabsTrigger value="library" className="data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=active]:underline data-[state=active]:underline-offset-4 bg-transparent shadow-none p-0">
               <Palette className="w-4 h-4 mr-2" />
               Palette Library
             </TabsTrigger>
-            <TabsTrigger value="generator">
+            <Separator orientation="vertical" className="h-5"/>
+            <TabsTrigger value="generator" className="data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=active]:underline data-[state=active]:underline-offset-4 bg-transparent shadow-none p-0">
               <Wand2 className="w-4 h-4 mr-2" />
               AI Generator
             </TabsTrigger>
-            <TabsTrigger value="brands">
+             <Separator orientation="vertical" className="h-5"/>
+            <TabsTrigger value="brands" className="data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=active]:underline data-[state=active]:underline-offset-4 bg-transparent shadow-none p-0">
               <Paintbrush className="w-4 h-4 mr-2" />
               Brand Colors
             </TabsTrigger>
