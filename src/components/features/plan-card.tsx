@@ -1,82 +1,69 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  CardDescription,
 } from '@/components/ui/card';
-import { ZoomIn, ZoomOut, Download, ChevronDown, ChevronUp } from 'lucide-react';
 import { type HousePlan } from '@/lib/placeholder-plans';
 import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
 
 type PlanCardProps = {
   plan: HousePlan;
 };
 
 export function PlanCard({ plan }: PlanCardProps) {
-  const [scale, setScale] = useState(1);
-  const [showDescription, setShowDescription] = useState(false);
   const { toast } = useToast();
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = plan.imageUrl;
-    link.download = `${plan.title.replace(/\s+/g, '-')}.jpg`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleSave = () => {
     toast({
-        title: "Downloading Plan",
-        description: `${plan.title} image is being downloaded.`
+      title: 'Saved!',
+      description: `The "${plan.title}" plan has been saved to your profile.`,
+    });
+  };
+
+  const handleViewDetails = () => {
+    toast({
+        title: "Details Coming Soon",
+        description: "Detailed view for this plan will be available shortly."
     })
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{plan.title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="relative w-full h-auto mb-4 overflow-hidden border rounded-lg">
-          <Image
+    <Card className="overflow-hidden">
+      <CardContent className="p-0 flex flex-col md:flex-row">
+        <div className="relative w-full md:w-1/3 aspect-[3/4]">
+           <Image
             src={plan.imageUrl}
             alt={plan.title}
-            width={400}
-            height={300}
-            className="transition-transform duration-300 w-full"
-            style={{ transform: `scale(${scale})` }}
+            fill
+            className="object-cover"
             data-ai-hint={plan.imageHint}
           />
         </div>
-        <div className="flex justify-center gap-2 mb-4">
-          <Button variant="outline" size="icon" onClick={() => setScale(s => Math.min(s + 0.1, 2))}>
-            <ZoomIn />
-          </Button>
-          <Button variant="outline" size="icon" onClick={() => setScale(s => Math.max(s - 0.1, 0.5))}>
-            <ZoomOut />
-          </Button>
-          <Button variant="outline" size="icon" onClick={handleDownload}>
-            <Download />
-          </Button>
+        <div className="flex-1 p-6 flex flex-col justify-between">
+            <div>
+                <Badge 
+                    variant={
+                        plan.tag === 'Popular' ? 'default' : 
+                        plan.tag === 'New' ? 'secondary' : 'destructive'
+                    }
+                    className="mb-4"
+                >
+                    {plan.tag}
+                </Badge>
+                <h2 className="text-3xl font-bold">{plan.area}</h2>
+                <p className="text-muted-foreground text-lg mt-1">{plan.bedrooms} &middot; {plan.facing}</p>
+                <p className="text-muted-foreground text-lg">{plan.floor}</p>
+            </div>
+            <div className="flex gap-2 mt-6">
+                <Button className="w-full" onClick={handleViewDetails}>View Details</Button>
+                <Button variant="outline" className="w-full" onClick={handleSave}>Save</Button>
+            </div>
         </div>
-        {showDescription && (
-            <CardDescription className="mt-4 p-4 bg-muted rounded-lg border">
-                {plan.description}
-            </CardDescription>
-        )}
       </CardContent>
-      <CardFooter>
-        <Button variant="secondary" className="w-full" onClick={() => setShowDescription(prev => !prev)}>
-            {showDescription ? 'Hide Details' : 'View Details'}
-            {showDescription ? <ChevronUp className="ml-2"/> : <ChevronDown className="ml-2"/>}
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

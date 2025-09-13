@@ -10,7 +10,7 @@ export default function HouseDesignsPage() {
         description="Explore a collection of house plans suitable for Indian families."
       />
       <div className="flex-1 overflow-y-auto p-6 pt-0">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="space-y-8">
           {housePlans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} />
           ))}
