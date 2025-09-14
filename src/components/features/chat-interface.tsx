@@ -12,7 +12,6 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
-import Link from 'next/link';
 
 export type Message = {
   id?: string;
@@ -30,17 +29,11 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-type ChatInterfaceProps = {
-  chatId: string;
-  messages: Message[];
-  onMessageSent: () => void; // Callback to notify parent about new messages
-  isLoading: boolean;
-};
-
-export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: ChatInterfaceProps) {
+export function ChatInterface() {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [image, setImage] = useState<string | null>(null);
-  const [isSending, setIsSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -60,26 +53,52 @@ export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: Ch
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if ((!input.trim() && !image) || isSending || !chatId) return;
+    if ((!input.trim() && !image) || isLoading) return;
 
     const currentInput = input;
     const currentImage = image;
 
+    const userMessage: Message = {
+        role: 'user',
+        content: currentInput,
+        ...(currentImage && { image: currentImage }),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setImage(null);
-    setIsSending(true);
+    setIsLoading(true);
 
     try {
-        await getChatbotResponse({ chatId, query: currentInput, photoDataUri: currentImage || undefined });
-        onMessageSent(); // Notify parent to refetch messages
+        const result = await getChatbotResponse({ 
+            query: currentInput, 
+            photoDataUri: currentImage || undefined,
+            messages: [...messages, userMessage]
+        });
+
+        if (result.error) {
+             toast({
+                title: "Error",
+                description: result.error,
+                variant: "destructive",
+            });
+             setMessages((prev) => prev.slice(0, -1)); // Remove user message on error
+        } else {
+            const assistantMessage: Message = {
+                role: 'assistant',
+                content: result.answer!,
+            };
+            setMessages((prev) => [...prev, assistantMessage]);
+        }
     } catch (error) {
         toast({
             title: "Error",
             description: "Failed to send message. Please try again.",
             variant: "destructive",
         })
+        setMessages((prev) => prev.slice(0, -1)); // Remove user message on error
     } finally {
-        setIsSending(false);
+        setIsLoading(false);
     }
   };
   
@@ -103,13 +122,13 @@ export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: Ch
               <Bot className="mx-auto h-12 w-12" />
               <h3 className="mt-4 text-lg font-medium">Welcome to NexaHome Chat</h3>
               <p className="mt-1 text-sm">
-                {chatId ? "Start a conversation by typing below or uploading a file." : "Select a chat or start a new one."}
+                Start a conversation by typing below or uploading a file.
               </p>
             </div>
           )}
-          {messages.map((message) => (
+          {messages.map((message, index) => (
             <div
-              key={message.id}
+              key={`${message.role}-${index}`}
               className={cn(
                 'flex items-start gap-3',
                 message.role === 'user' ? 'justify-end' : 'justify-start'
@@ -142,7 +161,7 @@ export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: Ch
               )}
             </div>
           ))}
-          {(isLoading || isSending) && (
+          {isLoading && (
              <div className="flex items-start gap-3 justify-start">
               <Avatar className="w-8 h-8 border">
                 <AvatarFallback>N</AvatarFallback>
@@ -172,7 +191,7 @@ export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: Ch
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={chatId ? "Ask AI or drop an image..." : "Start a new chat to begin."}
+          placeholder={"Ask AI or drop an image..."}
           className="pr-28 min-h-[52px] resize-none"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -180,18 +199,18 @@ export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: Ch
               handleSubmit(e as any);
             }
           }}
-          disabled={isSending || !chatId}
+          disabled={isLoading}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-           <Button type="button" size="icon" variant="ghost" disabled={isSending || !chatId} onClick={open}>
+           <Button type="button" size="icon" variant="ghost" disabled={isLoading} onClick={open}>
               <Paperclip />
             </Button>
           <Button
             type="submit"
             size="icon"
-            disabled={isSending || (!input.trim() && !image) || !chatId}
+            disabled={isLoading || (!input.trim() && !image)}
           >
-            {isSending ? (
+            {isLoading ? (
               <LoaderCircle className="animate-spin" />
             ) : (
               <CornerDownLeft />
@@ -202,4 +221,3 @@ export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: Ch
     </div>
   );
 }
-

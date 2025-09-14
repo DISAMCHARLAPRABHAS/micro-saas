@@ -1,5 +1,5 @@
 'use client';
-import { ChatLayout } from '@/components/features/chat-layout';
+import { ChatInterface } from '@/components/features/chat-interface';
 import { PageHeader } from '@/components/page-header';
 
 export default function ChatPage() {
@@ -10,7 +10,7 @@ export default function ChatPage() {
         description="Your AI assistant for home construction, materials, and design."
       />
       <div className="flex-1 overflow-hidden">
-        <ChatLayout />
+        <ChatInterface />
       </div>
     </div>
   );

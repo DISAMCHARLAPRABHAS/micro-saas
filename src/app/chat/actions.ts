@@ -2,50 +2,38 @@
 
 import { chatBotAssistance } from '@/ai/flows/chatbot-assistance';
 import { chatWithImage } from '@/ai/flows/chat-with-image';
-import { addMessage } from '@/lib/firebase';
 import { z } from 'zod';
 
 const schema = z.object({
   query: z.string(),
   photoDataUri: z.string().optional(),
-  chatId: z.string(),
+  messages: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string(),
+    image: z.string().optional(),
+  }))
 });
 
-export async function getChatbotResponse(input: { chatId: string, query: string, photoDataUri?: string }) {
-  const validatedInput = schema.parse(input);
+export async function getChatbotResponse(input: { query: string, photoDataUri?: string, messages: any[] }) {
+  const validatedInput = schema.safeParse(input);
+  
+  if (!validatedInput.success) {
+    return { error: 'Invalid input.' };
+  }
+  
   try {
-    // Save user message to Firestore
-    await addMessage(validatedInput.chatId, {
-      role: 'user',
-      content: validatedInput.query,
-      ...(validatedInput.photoDataUri && { image: validatedInput.photoDataUri }),
-    });
+    const { query, photoDataUri } = validatedInput.data;
     
     let result;
-    if (validatedInput.photoDataUri) {
-      result = await chatWithImage(validatedInput as { query: string, photoDataUri: string });
+    if (photoDataUri) {
+      result = await chatWithImage({ query, photoDataUri });
     } else {
-      result = await chatBotAssistance({ query: validatedInput.query });
+      result = await chatBotAssistance({ query });
     }
-
-    // Save assistant response to Firestore
-    await addMessage(validatedInput.chatId, {
-      role: 'assistant',
-      content: result.answer,
-    });
 
     return { answer: result.answer };
   } catch (error) {
     console.error(error);
-    const errorMessage = 'An error occurred while getting the response.';
-     try {
-      await addMessage(validatedInput.chatId, {
-        role: 'assistant',
-        content: errorMessage,
-      });
-    } catch (dbError) {
-      console.error('Failed to save error message to db', dbError);
-    }
-    return { error: errorMessage };
+    return { error: 'An error occurred while getting the response.' };
   }
 }
