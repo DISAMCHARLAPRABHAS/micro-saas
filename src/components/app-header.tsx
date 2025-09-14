@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import { MainNav } from './main-nav';
 import { UserNav } from './user-nav';
 import { useToast } from '@/hooks/use-toast';
+import { AppLogo } from './app-logo';
 
 export function AppHeader() {
   const { toast } = useToast();
@@ -12,9 +13,7 @@ export function AppHeader() {
     <header className="flex h-16 items-center justify-between gap-4 border-b bg-card px-4 md:px-6 z-20">
       <div className="flex items-center gap-4">
         <div className="group flex items-center gap-2 transition-transform duration-300 hover:scale-105">
-          <h1 className="text-lg font-headline font-semibold text-primary transition-colors duration-300 group-hover:text-primary/80">
-            NexaHome
-          </h1>
+          <AppLogo />
         </div>
         <MainNav />
       </div>
