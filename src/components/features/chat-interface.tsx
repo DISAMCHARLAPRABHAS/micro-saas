@@ -136,7 +136,7 @@ export function ChatInterface() {
             >
               {message.role === 'assistant' && (
                 <Avatar className="w-8 h-8 border">
-                  <AvatarFallback>N</AvatarFallback>
+                  <AvatarFallback>Nexa</AvatarFallback>
                 </Avatar>
               )}
               <div
@@ -164,7 +164,7 @@ export function ChatInterface() {
           {isLoading && (
              <div className="flex items-start gap-3 justify-start">
               <Avatar className="w-8 h-8 border">
-                <AvatarFallback>N</AvatarFallback>
+                <AvatarFallback>Nexa</AvatarFallback>
               </Avatar>
               <div className="rounded-lg p-3 bg-card border">
                 <LoaderCircle className="animate-spin w-5 h-5 text-primary" />
@@ -191,7 +191,7 @@ export function ChatInterface() {
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={"Ask AI or drop an image..."}
+          placeholder={"Ask Nexa or drop an image..."}
           className="pr-28 min-h-[52px] resize-none"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
