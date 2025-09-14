@@ -6,7 +6,7 @@ import {
   Scale,
   FileText,
   Percent,
-  Bank,
+  Landmark,
   Lightbulb,
   Bot,
 } from 'lucide-react';
@@ -46,7 +46,7 @@ const loanSections = [
   {
     title: 'Government Schemes',
     description: 'Learn about PMAY, subsidies, and state schemes.',
-    icon: <Bank className="w-8 h-8 text-primary" />,
+    icon: <Landmark className="w-8 h-8 text-primary" />,
     href: '#',
   },
   {
