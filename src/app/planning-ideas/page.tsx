@@ -27,7 +27,7 @@ const categories = [
     title: 'Loan Guide',
     icon: <Landmark className="w-8 h-8 text-primary" />,
     description: 'Information and guidance on home loans.',
-    href: '#', // Will be implemented later
+    href: '/loan-guide', 
   },
   {
     title: 'Interior Design',
