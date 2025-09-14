@@ -3,6 +3,7 @@ import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building, Home, Lightbulb, Landmark, Sofa } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const categories = [
   {
@@ -45,6 +46,18 @@ export default function PlanningIdeasPage() {
         description="Your starting point for planning your dream home."
       />
       <div className="flex-1 overflow-y-auto p-6 pt-0">
+        <div className="mb-8">
+          <Link href="https://ibb.co/yFfv9cfT" target="_blank">
+            <Image 
+              src="https://i.ibb.co/JjB61wBL/Gemini-Generated-Image-ds5q8ds5q8ds5q8d-1.png"
+              alt="Promotional Banner"
+              width={1200}
+              height={300}
+              className="rounded-lg object-cover w-full"
+              data-ai-hint="promotional banner"
+            />
+          </Link>
+        </div>
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {categories.map((category) => (
             <Link href={category.href} key={category.title}>
