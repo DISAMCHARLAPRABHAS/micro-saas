@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
+import { useState } from 'react';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address.'),
