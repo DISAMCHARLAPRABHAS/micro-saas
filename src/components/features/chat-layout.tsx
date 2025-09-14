@@ -18,26 +18,28 @@ export function ChatLayout() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [activeChatId, setActiveChatId] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isChatsLoading, setIsChatsLoading] = useState(true);
+  const [isMessagesLoading, setIsMessagesLoading] = useState(false);
 
   const fetchChats = useCallback(async () => {
     if (user) {
-      setIsLoading(true);
+      setIsChatsLoading(true);
       const userChats = await getChats(user.uid);
       setChats(userChats);
       if (userChats.length > 0 && !activeChatId) {
         setActiveChatId(userChats[0].id);
       }
-      setIsLoading(false);
+      setIsChatsLoading(false);
     }
-  }, [user, activeChatId]);
+  }, [user]);
 
   const fetchMessages = useCallback(async () => {
     if (activeChatId) {
-      setIsLoading(true);
+      setIsMessagesLoading(true);
+      setMessages([]);
       const chatMessages = await getChatMessages(activeChatId);
       setMessages(chatMessages);
-      setIsLoading(false);
+      setIsMessagesLoading(false);
     } else {
       setMessages([]);
     }
@@ -45,26 +47,32 @@ export function ChatLayout() {
 
   useEffect(() => {
     fetchChats();
-  }, [user]);
+  }, [fetchChats]);
 
   useEffect(() => {
     fetchMessages();
-  }, [activeChatId]);
+  }, [fetchMessages]);
 
   const handleNewChat = async () => {
     if(user) {
+        setIsMessagesLoading(true);
         const newChatId = await createChat(user.uid, 'New Chat');
-        await fetchChats();
-        setActiveChatId(newChatId);
+        await fetchChats(); // Refetch chats to include the new one
+        setActiveChatId(newChatId); // Set the new chat as active
     }
   };
-
-  const handleMessageSent = () => {
+  
+  const handleMessageSent = useCallback(() => {
     fetchMessages(); // Refetch messages after sending a new one
-    // Potentially refetch chats if the title might change, but not essential
-  };
+    // We could also update the chat list here if the title changes
+    const currentChat = chats.find(c => c.id === activeChatId);
+    if (currentChat && messages.length === 0) {
+        fetchChats();
+    }
+  }, [activeChatId, chats, fetchChats, messages.length]);
 
-  if (isLoading && chats.length === 0) {
+
+  if (isChatsLoading) {
       return (
           <div className="flex h-full items-center justify-center">
               <LoaderCircle className="h-8 w-8 animate-spin" />
@@ -88,8 +96,10 @@ export function ChatLayout() {
             chatId={activeChatId}
             messages={messages}
             onMessageSent={handleMessageSent}
+            isLoading={isMessagesLoading}
         />
       </ResizablePanel>
     </ResizablePanelGroup>
   );
 }
+

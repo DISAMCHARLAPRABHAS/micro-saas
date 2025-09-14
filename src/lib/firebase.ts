@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   doc,
   getDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import type { Message } from '@/components/features/chat-interface';
 
@@ -33,7 +34,7 @@ const db = getFirestore(app);
 export type Chat = {
   id: string;
   title: string;
-  createdAt: Date;
+  createdAt: Timestamp;
   userId: string;
 }
 
@@ -65,10 +66,10 @@ export async function getChatMessages(chatId: string): Promise<Message[]> {
     } as Message));
 }
 
-export async function createChat(userId: string, firstMessage: string): Promise<string> {
+export async function createChat(userId: string, title: string): Promise<string> {
     const docRef = await addDoc(collection(db, 'chats'), {
         userId,
-        title: firstMessage.substring(0, 40) || 'New Chat',
+        title: title || 'New Chat',
         createdAt: serverTimestamp()
     });
     return docRef.id;

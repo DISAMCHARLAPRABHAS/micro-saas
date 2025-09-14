@@ -1,3 +1,4 @@
+
 'use client';
 
 import { getChatbotResponse } from '@/app/chat/actions';
@@ -33,12 +34,13 @@ type ChatInterfaceProps = {
   chatId: string;
   messages: Message[];
   onMessageSent: () => void; // Callback to notify parent about new messages
+  isLoading: boolean;
 };
 
-export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterfaceProps) {
+export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: ChatInterfaceProps) {
   const [input, setInput] = useState('');
   const [image, setImage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -58,15 +60,27 @@ export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterface
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if ((!input.trim() && !image) || isLoading || !chatId) return;
+    if ((!input.trim() && !image) || isSending || !chatId) return;
+
+    const currentInput = input;
+    const currentImage = image;
 
     setInput('');
     setImage(null);
-    setIsLoading(true);
+    setIsSending(true);
 
-    await getChatbotResponse({ chatId, query: input, photoDataUri: image || undefined });
-    onMessageSent(); // Notify parent to refetch messages
-    setIsLoading(false);
+    try {
+        await getChatbotResponse({ chatId, query: currentInput, photoDataUri: currentImage || undefined });
+        onMessageSent(); // Notify parent to refetch messages
+    } catch (error) {
+        toast({
+            title: "Error",
+            description: "Failed to send message. Please try again.",
+            variant: "destructive",
+        })
+    } finally {
+        setIsSending(false);
+    }
   };
   
   useEffect(() => {
@@ -76,7 +90,7 @@ export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterface
         behavior: 'smooth',
       });
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
 
   return (
@@ -88,7 +102,9 @@ export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterface
             <div className="text-center text-muted-foreground pt-10">
               <Bot className="mx-auto h-12 w-12" />
               <h3 className="mt-4 text-lg font-medium">Welcome to NexaHome Chat</h3>
-              <p className="mt-1 text-sm">Start a conversation by typing below or uploading a file.</p>
+              <p className="mt-1 text-sm">
+                {chatId ? "Start a conversation by typing below or uploading a file." : "Select a chat or start a new one."}
+              </p>
             </div>
           )}
           {messages.map((message) => (
@@ -136,7 +152,7 @@ export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterface
               )}
             </div>
           ))}
-          {isLoading && (
+          {(isLoading || isSending) && (
              <div className="flex items-start gap-3 justify-start">
               <Avatar className="w-8 h-8 border">
                 <AvatarFallback>N</AvatarFallback>
@@ -174,18 +190,18 @@ export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterface
               handleSubmit(e as any);
             }
           }}
-          disabled={isLoading || !chatId}
+          disabled={isSending || !chatId}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-           <Button type="button" size="icon" variant="ghost" disabled={isLoading || !chatId} onClick={open}>
+           <Button type="button" size="icon" variant="ghost" disabled={isSending || !chatId} onClick={open}>
               <Paperclip />
             </Button>
           <Button
             type="submit"
             size="icon"
-            disabled={isLoading || (!input.trim() && !image) || !chatId}
+            disabled={isSending || (!input.trim() && !image) || !chatId}
           >
-            {isLoading ? (
+            {isSending ? (
               <LoaderCircle className="animate-spin" />
             ) : (
               <CornerDownLeft />
@@ -196,3 +212,4 @@ export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterface
     </div>
   );
 }
+
