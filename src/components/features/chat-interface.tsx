@@ -134,16 +134,6 @@ export function ChatInterface({ chatId, messages, onMessageSent, isLoading }: Ch
                   </div>
                 )}
                 {message.content && <p className="whitespace-pre-wrap">{message.content}</p>}
-                 {message.role === 'assistant' && !message.content.startsWith('An error occurred') && (
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>✅ Save to Project</Button>
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href="/color-palettes">🎨 Generate Palette</Link>
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>🏠 Show Design Ideas</Button>
-                    <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>💰 Estimate Budget</Button>
-                  </div>
-                )}
               </div>
               {message.role === 'user' && (
                 <Avatar className="w-8 h-8">
