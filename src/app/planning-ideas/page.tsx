@@ -46,7 +46,7 @@ export default function PlanningIdeasPage() {
         description="Your starting point for planning your dream home."
       />
       <div className="flex-1 overflow-y-auto p-6 pt-0">
-        <div className="mb-8">
+        <div className="mb-8 max-w-5xl mx-auto">
             <HomeCarousel />
         </div>
         <div className="grid md:grid-cols-3 gap-6 mb-8">
