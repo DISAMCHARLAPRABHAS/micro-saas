@@ -1,5 +1,5 @@
 'use client';
-import { ChatInterface } from '@/components/features/chat-interface';
+import { ChatLayout } from '@/components/features/chat-layout';
 import { PageHeader } from '@/components/page-header';
 
 export default function ChatPage() {
@@ -7,10 +7,10 @@ export default function ChatPage() {
     <div className="flex flex-col h-full">
       <PageHeader
         title="NexaHome Chat"
-        description="Ask me anything about home construction, materials, design, and budgeting."
+        description="Your AI assistant for home construction, materials, and design."
       />
       <div className="flex-1 overflow-hidden">
-        <ChatInterface />
+        <ChatLayout />
       </div>
     </div>
   );

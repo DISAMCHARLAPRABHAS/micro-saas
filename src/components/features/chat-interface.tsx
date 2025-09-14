@@ -6,14 +6,15 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { CornerDownLeft, LoaderCircle, Paperclip, X } from 'lucide-react';
+import { CornerDownLeft, LoaderCircle, Paperclip, X, Bot } from 'lucide-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type Message = {
+export type Message = {
+  id?: string;
   role: 'user' | 'assistant';
   content: string;
   image?: string;
@@ -28,9 +29,13 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
+type ChatInterfaceProps = {
+  chatId: string;
+  messages: Message[];
+  onMessageSent: () => void; // Callback to notify parent about new messages
+};
 
-export function ChatInterface() {
-  const [messages, setMessages] = useState<Message[]>([]);
+export function ChatInterface({ chatId, messages, onMessageSent }: ChatInterfaceProps) {
   const [input, setInput] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,26 +58,14 @@ export function ChatInterface() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if ((!input.trim() && !image) || isLoading) return;
+    if ((!input.trim() && !image) || isLoading || !chatId) return;
 
-    const userMessage: Message = { role: 'user', content: input, image: image || undefined };
-    setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setImage(null);
     setIsLoading(true);
 
-    const response = await getChatbotResponse({ query: input, photoDataUri: image || undefined });
-
-    if (response.answer) {
-      const assistantMessage: Message = { role: 'assistant', content: response.answer };
-      setMessages((prev) => [...prev, assistantMessage]);
-    } else {
-      const errorMessage: Message = {
-        role: 'assistant',
-        content: response.error || 'Sorry, something went wrong.',
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    }
+    await getChatbotResponse({ chatId, query: input, photoDataUri: image || undefined });
+    onMessageSent(); // Notify parent to refetch messages
     setIsLoading(false);
   };
   
@@ -87,19 +80,20 @@ export function ChatInterface() {
 
 
   return (
-    <div className="h-full flex flex-col p-6 pt-0" {...getRootProps()}>
+    <div className="h-full flex flex-col p-4 pt-0" {...getRootProps()}>
       <input {...getInputProps()} />
       <ScrollArea className="flex-1 mb-4" ref={scrollAreaRef}>
         <div className="space-y-6 pr-4">
-          {messages.length === 0 && (
+          {messages.length === 0 && !isLoading && (
             <div className="text-center text-muted-foreground pt-10">
-              <p className="font-headline">Welcome to NexaHome Chat</p>
-              <p>Start a conversation by typing below or uploading a file.</p>
+              <Bot className="mx-auto h-12 w-12" />
+              <h3 className="mt-4 text-lg font-medium">Welcome to NexaHome Chat</h3>
+              <p className="mt-1 text-sm">Start a conversation by typing below or uploading a file.</p>
             </div>
           )}
-          {messages.map((message, index) => (
+          {messages.map((message) => (
             <div
-              key={index}
+              key={message.id}
               className={cn(
                 'flex items-start gap-3',
                 message.role === 'user' ? 'justify-end' : 'justify-start'
@@ -124,7 +118,7 @@ export function ChatInterface() {
                   </div>
                 )}
                 {message.content && <p className="whitespace-pre-wrap">{message.content}</p>}
-                 {message.role === 'assistant' && (
+                 {message.role === 'assistant' && !message.content.startsWith('An error occurred') && (
                   <div className="flex flex-wrap gap-2 mt-4">
                     <Button variant="outline" size="sm" onClick={() => toast({ title: 'Coming Soon!' })}>✅ Save to Project</Button>
                     <Button variant="outline" size="sm" asChild>
@@ -172,7 +166,7 @@ export function ChatInterface() {
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask AI or drop an image..."
+          placeholder={chatId ? "Ask AI or drop an image..." : "Start a new chat to begin."}
           className="pr-28 min-h-[52px] resize-none"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -180,16 +174,16 @@ export function ChatInterface() {
               handleSubmit(e as any);
             }
           }}
-          disabled={isLoading}
+          disabled={isLoading || !chatId}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-           <Button type="button" size="icon" variant="ghost" disabled={isLoading} onClick={open}>
+           <Button type="button" size="icon" variant="ghost" disabled={isLoading || !chatId} onClick={open}>
               <Paperclip />
             </Button>
           <Button
             type="submit"
             size="icon"
-            disabled={isLoading || (!input.trim() && !image)}
+            disabled={isLoading || (!input.trim() && !image) || !chatId}
           >
             {isLoading ? (
               <LoaderCircle className="animate-spin" />

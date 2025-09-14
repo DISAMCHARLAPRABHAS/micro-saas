@@ -2,24 +2,50 @@
 
 import { chatBotAssistance } from '@/ai/flows/chatbot-assistance';
 import { chatWithImage } from '@/ai/flows/chat-with-image';
+import { addMessage } from '@/lib/firebase';
 import { z } from 'zod';
 
 const schema = z.object({
   query: z.string(),
   photoDataUri: z.string().optional(),
+  chatId: z.string(),
 });
 
-export async function getChatbotResponse(input: { query: string, photoDataUri?: string }) {
+export async function getChatbotResponse(input: { chatId: string, query: string, photoDataUri?: string }) {
   const validatedInput = schema.parse(input);
   try {
+    // Save user message to Firestore
+    await addMessage(validatedInput.chatId, {
+      role: 'user',
+      content: validatedInput.query,
+      ...(validatedInput.photoDataUri && { image: validatedInput.photoDataUri }),
+    });
+    
+    let result;
     if (validatedInput.photoDataUri) {
-      const result = await chatWithImage(validatedInput as { query: string, photoDataUri: string });
-      return { answer: result.answer };
+      result = await chatWithImage(validatedInput as { query: string, photoDataUri: string });
+    } else {
+      result = await chatBotAssistance({ query: validatedInput.query });
     }
-    const result = await chatBotAssistance({ query: validatedInput.query });
+
+    // Save assistant response to Firestore
+    await addMessage(validatedInput.chatId, {
+      role: 'assistant',
+      content: result.answer,
+    });
+
     return { answer: result.answer };
   } catch (error) {
     console.error(error);
-    return { error: 'An error occurred while getting the response.' };
+    const errorMessage = 'An error occurred while getting the response.';
+     try {
+      await addMessage(validatedInput.chatId, {
+        role: 'assistant',
+        content: errorMessage,
+      });
+    } catch (dbError) {
+      console.error('Failed to save error message to db', dbError);
+    }
+    return { error: errorMessage };
   }
 }
