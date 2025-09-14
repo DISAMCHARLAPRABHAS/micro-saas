@@ -46,17 +46,43 @@ export default function PlanningIdeasPage() {
         description="Your starting point for planning your dream home."
       />
       <div className="flex-1 overflow-y-auto p-6 pt-0">
-        <div className="mb-8">
-          <Link href="https://ibb.co/yFfv9cfT" target="_blank">
-            <Image 
-              src="https://i.ibb.co/JjB61wBL/Gemini-Generated-Image-ds5q8ds5q8ds5q8d-1.png"
-              alt="Promotional Banner"
-              width={1200}
-              height={300}
-              className="rounded-lg object-cover w-full"
-              data-ai-hint="promotional banner"
-            />
-          </Link>
+        <div className="mb-8 grid grid-cols-2 gap-4">
+          <div className="col-span-2">
+            <Link href="https://ibb.co/yFfv9cfT" target="_blank">
+              <Image 
+                src="https://i.ibb.co/JjB61wBL/Gemini-Generated-Image-ds5q8ds5q8ds5q8d-1.png"
+                alt="Promotional Banner"
+                width={1200}
+                height={300}
+                className="rounded-lg object-cover w-full h-full"
+                data-ai-hint="promotional banner"
+              />
+            </Link>
+          </div>
+           <div>
+             <Link href="https://ibb.co/fzkKH1pS" target="_blank">
+              <Image 
+                src="https://i.ibb.co/YFcKhRkW/Gemini-Generated-Image-t6t2igt6t2igt6t2.png"
+                alt="Gemini-Generated-Image-t6t2igt6t2igt6t2"
+                width={600}
+                height={300}
+                className="rounded-lg object-cover w-full h-full"
+                data-ai-hint="modern living room"
+              />
+            </Link>
+           </div>
+            <div>
+              <Link href="https://ibb.co/B5K3py79" target="_blank">
+                <Image 
+                  src="https://i.ibb.co/YFTQCcKx/Gemini-Generated-Image.png"
+                  alt="Gemini-Generated-Image"
+                  width={600}
+                  height={300}
+                  className="rounded-lg object-cover w-full h-full"
+                  data-ai-hint="luxury kitchen"
+                />
+              </Link>
+            </div>
         </div>
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {categories.map((category) => (
